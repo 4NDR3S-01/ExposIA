@@ -1,6 +1,7 @@
 # ExposIA – Asistente de Exposición Oral
 
 **Propuesta Original desarrollada por DweskZ (Luis Figueroa)**  
+
 **Implementacion y equipo de desarrollo: Carlos Chile, Anthony Mejia, William Cabrera**
 
 **Fecha de creación:** 2025-05-07  
