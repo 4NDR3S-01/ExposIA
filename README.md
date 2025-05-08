@@ -2,7 +2,7 @@
 
 **Propuesta Original desarrollada por DweskZ (Luis Figueroa)**  
 **Fecha de creación:** 2025-05-07  
-**Repositorio de respaldo para autoría y diseño original del sistema ExposIA.**
+**Repositorio de diseño original del sistema ExposIA.**
 
 ---
 
