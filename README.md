@@ -19,7 +19,7 @@ Este repositorio documenta el diseño funcional y técnico original, creado como
 ---
 
 ## 📁 Contenido
-
+- **Backend:** backend de la aplicacion.
 - **Flujo de datos simulado:** muestra paso a paso la experiencia del usuario y cómo interviene la IA.
 - **Modelo de base de datos:** incluye diseño de tablas y relaciones entre entidades.
 - **Documento técnico:** describe los módulos del sistema, tecnologías empleadas y arquitectura modular.
@@ -35,6 +35,17 @@ Este repositorio documenta el diseño funcional y técnico original, creado como
 - PostgreSQL – base de datos compartida
 
 ---
+## 🧑‍💻 Integrantes y Módulos
+
+| Nombre              | Lenguaje     | Módulo                |
+|---------------------|--------------|------------------------|
+| Luis Figueroa       | TypeScript   | Prácticas              |
+| Carlos Chile        | PHP          | Presentaciones         |
+| Anthony Mejía       | Python       | Feedback / IA          |
+| William Cabrera     | Java         | Calificación           |
+
+---
+
 
 ## ⚖️ Licencia
 
