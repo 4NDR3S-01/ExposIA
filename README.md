@@ -40,9 +40,9 @@ Este repositorio documenta el diseño funcional y técnico original, creado como
 | Nombre              | Lenguaje     | Módulo                |
 |---------------------|--------------|------------------------|
 | Luis Figueroa       | TypeScript   | Prácticas              |
-| Carlos Chile        | PHP          | Presentaciones         |
-| Anthony Mejía       | Python       | Feedback / IA          |
-| William Cabrera     | Java         | Calificación           |
+| Carlos Chile        | Java          | Calificacion          |
+| Anthony Mejía       | PHP           | Presentaciones       |
+| William Cabrera     | Python         | Feedback / IA           |
 
 ---
 
