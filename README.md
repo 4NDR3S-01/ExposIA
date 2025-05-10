@@ -1,8 +1,11 @@
 # ExposIA – Asistente de Exposición Oral
 
 **Propuesta Original desarrollada por DweskZ (Luis Figueroa)**  
+
 **Implementacion y equipo de desarrollo: Carlos Chile, Anthony Mejia, William Cabrera**
+
 **Fecha de creación:** 2025-05-07  
+
 **Repositorio de diseño original del sistema ExposIA.**
 
 ---
@@ -16,7 +19,7 @@ Este repositorio documenta el diseño funcional y técnico original, creado como
 ---
 
 ## 📁 Contenido
-
+- **Backend:** backend de la aplicacion.
 - **Flujo de datos simulado:** muestra paso a paso la experiencia del usuario y cómo interviene la IA.
 - **Modelo de base de datos:** incluye diseño de tablas y relaciones entre entidades.
 - **Documento técnico:** describe los módulos del sistema, tecnologías empleadas y arquitectura modular.
@@ -32,6 +35,17 @@ Este repositorio documenta el diseño funcional y técnico original, creado como
 - PostgreSQL – base de datos compartida
 
 ---
+## 🧑‍💻 Integrantes y Módulos
+
+| Nombre              | Lenguaje     | Módulo                |
+|---------------------|--------------|------------------------|
+| Luis Figueroa       | TypeScript   | Prácticas              |
+| Carlos Chile        | Java          | Calificacion          |
+| Anthony Mejía       | PHP           | Presentaciones       |
+| William Cabrera     | Python         | Feedback / IA           |
+
+---
+
 
 ## ⚖️ Licencia
 
