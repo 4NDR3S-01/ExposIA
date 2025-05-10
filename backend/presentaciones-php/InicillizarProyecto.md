@@ -1,7 +1,7 @@
 # Inicilizar el proyecto de forma local 
 
 **En consola**
-php -S localhost:8000
+php artisan serve
 
 **En el navegador**
-http://localhost:8000/example.php
+http://127.0.0.1:8000/categorias
