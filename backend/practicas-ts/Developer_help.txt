@@ -20,3 +20,7 @@ POSTGRES_DB → exposia
 Para verificar el puerto en la terminal de docker 
 
 docker ps 
+
+
+
+http://localhost:3000
