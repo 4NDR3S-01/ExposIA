@@ -24,3 +24,6 @@ docker ps
 
 
 http://localhost:3000
+
+
+Se instalo tambien npm install class-validator class-transformer
