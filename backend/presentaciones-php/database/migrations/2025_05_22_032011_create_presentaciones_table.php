@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('presentaciones', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->text('descripcion')->nullable();
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
-            $table->foreignId('tema_id')->constrained('temas')->onDelete('cascade');
+            $table->foreignId('id_usuario')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('id_tema')->constrained('temas')->onDelete('cascade');
+            $table->string('archivo_pdf')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presentacions');
+        Schema::dropIfExists('presentaciones');
     }
 };

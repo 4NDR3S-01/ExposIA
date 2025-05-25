@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('slides', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->text('contenido')->nullable();
-            $table->integer('orden')->default(0);
-            $table->foreignId('presentacion_id')->constrained('presentaciones')->onDelete('cascade');
+            $table->integer('numero_slide');
+            $table->string('imagen_slide')->nullable();
+            $table->text('texto_slide')->nullable();
+            $table->foreignId('id_presentacion')->constrained('presentaciones')->onDelete('cascade');
             $table->timestamps();
         });
     }

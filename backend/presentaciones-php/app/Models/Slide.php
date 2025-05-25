@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Slide extends Model
 {
-    public function presentacion(){
-        return $this->belongsTo(Presentacion::class);
+    protected $table = 'slides';     // Nombre de la tabla en la base de datos
+    protected $fillable = ['numero_slide', 'imagen_slide', 'texto_slide', 'id_presentacion'];     // Campos que se pueden asignar masivamente
+
+    // Relación: un Slide pertenece a una Presentación (clave foránea id_presentacion)
+    public function presentacion()
+    {
+        return $this->belongsTo(Presentacion::class, 'id_presentacion', 'id');
     }
 }
