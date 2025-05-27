@@ -9,4 +9,8 @@ export class CreateGrabacionDto {
 
   @IsString()
   archivo_audio: string;
+
+  @IsString()
+  nombreArchivo: string;
+
 }

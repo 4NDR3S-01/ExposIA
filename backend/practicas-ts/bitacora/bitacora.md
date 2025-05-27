@@ -55,3 +55,13 @@ src/
 ├── app.ts                     # Configuración central de la app
 ├── server.ts                  # Punto de arranque personalizado
 ├── main.ts                    # (Evaluando eliminar si server.ts lo reemplaza)
+
+
+
+# 27-5 
+
+Se utilizo entidades externas solo definidas por el ID para evitar el crasheo de las entidades y sus relaciones // Estas entidades externas estan en la carpeta correspondiente dentro de models
+
+//Se termino las 5 entidades con su DTOS 
+
+
