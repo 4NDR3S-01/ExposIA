@@ -7,10 +7,4 @@ export class CreateGrabacionDto {
   @IsInt()
   presentacion_id: number;
 
-  @IsString()
-  archivo_audio: string;
-
-  @IsString()
-  nombreArchivo: string;
-
 }

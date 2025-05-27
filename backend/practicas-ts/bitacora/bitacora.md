@@ -65,3 +65,8 @@ Se utilizo entidades externas solo definidas por el ID para evitar el crasheo de
 //Se termino las 5 entidades con su DTOS 
 
 
+npm install typeorm @nestjs/typeorm pg
+
+hay que instalar el multer de express
+
+El dto de grabaciones no se usa por ahora porque existe conflicto ya que al ser un modulo que maneja mp3 Eso es porque el @Body() en multipart se recibe como string plano y Nest no hace casting automático a number si el campo está acompañado de un archivo.
