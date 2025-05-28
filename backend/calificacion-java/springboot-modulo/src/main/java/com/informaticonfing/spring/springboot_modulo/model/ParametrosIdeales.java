@@ -1,12 +1,9 @@
-// src/main/java/com/informaticonfing/spring/springboot_modulo/model/ParametrosIdeales.java
 package com.informaticonfing.spring.springboot_modulo.model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 /**
- * Entidad que representa los parámetros ideales contra los cuales se compara
- * la grabación (puede ser claridad, velocidad, pausas ideales, etc.).
+ * Entidad para los parámetros ideales usados como referencia en la evaluación.
  */
 @Entity
 @Table(name = "parametros_ideales")
@@ -16,41 +13,38 @@ public class ParametrosIdeales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Claridad ideal esperada */
-    private double claridadIdeal;
+    private Double claridadIdeal;
+    private Double velocidadIdeal;
+    private Double pausasIdeales;
 
-    /** Velocidad ideal esperada */
-    private double velocidadIdeal;
+    @Column(columnDefinition = "TEXT")
+    private String otrosParametros; // JSON como texto
 
-    /** Número ideal de pausas */
-    private int pausasIdeales;
+    // Constructor vacío
+    public ParametrosIdeales() {}
 
-    /** Lista de calificaciones que usaron estos parámetros */
-    @OneToMany(mappedBy = "parametrosIdeales")
-    private List<Calificacion> calificaciones;
-
-    public ParametrosIdeales() { }
-
-    public ParametrosIdeales(double claridadIdeal, double velocidadIdeal, int pausasIdeales) {
+    // Constructor completo
+    public ParametrosIdeales(Long id, Double claridadIdeal, Double velocidadIdeal, Double pausasIdeales, String otrosParametros) {
+        this.id = id;
         this.claridadIdeal = claridadIdeal;
         this.velocidadIdeal = velocidadIdeal;
         this.pausasIdeales = pausasIdeales;
+        this.otrosParametros = otrosParametros;
     }
 
-    // --- Getters y Setters ---
-
+    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public double getClaridadIdeal() { return claridadIdeal; }
-    public void setClaridadIdeal(double claridadIdeal) { this.claridadIdeal = claridadIdeal; }
+    public Double getClaridadIdeal() { return claridadIdeal; }
+    public void setClaridadIdeal(Double claridadIdeal) { this.claridadIdeal = claridadIdeal; }
 
-    public double getVelocidadIdeal() { return velocidadIdeal; }
-    public void setVelocidadIdeal(double velocidadIdeal) { this.velocidadIdeal = velocidadIdeal; }
+    public Double getVelocidadIdeal() { return velocidadIdeal; }
+    public void setVelocidadIdeal(Double velocidadIdeal) { this.velocidadIdeal = velocidadIdeal; }
 
-    public int getPausasIdeales() { return pausasIdeales; }
-    public void setPausasIdeales(int pausasIdeales) { this.pausasIdeales = pausasIdeales; }
+    public Double getPausasIdeales() { return pausasIdeales; }
+    public void setPausasIdeales(Double pausasIdeales) { this.pausasIdeales = pausasIdeales; }
 
-    public List<Calificacion> getCalificaciones() { return calificaciones; }
-    public void setCalificaciones(List<Calificacion> calificaciones) { this.calificaciones = calificaciones; }
+    public String getOtrosParametros() { return otrosParametros; }
+    public void setOtrosParametros(String otrosParametros) { this.otrosParametros = otrosParametros; }
 }

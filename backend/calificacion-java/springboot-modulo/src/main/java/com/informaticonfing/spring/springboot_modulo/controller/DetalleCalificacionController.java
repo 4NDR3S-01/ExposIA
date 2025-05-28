@@ -8,8 +8,8 @@ import com.informaticonfing.spring.springboot_modulo.model.DetalleCalificacion;
 import com.informaticonfing.spring.springboot_modulo.service.DetalleCalificacionService;
 
 /**
- * Controlador REST para los detalles de calificación.
- * Permite CRUD de puntajes individuales por criterio en cada grabación.
+ * Controlador REST para la gestión de detalles de calificación.
+ * Permite consultar, crear, actualizar y eliminar los detalles asociados a cada calificación.
  */
 @RestController
 @RequestMapping("/api/detalles")
@@ -17,7 +17,7 @@ public class DetalleCalificacionController {
     private final DetalleCalificacionService service;
 
     /**
-     * Constructor con inyección de servicio.
+     * Constructor inyectando el servicio correspondiente.
      * @param service Servicio de DetalleCalificacion
      */
     public DetalleCalificacionController(DetalleCalificacionService service) {
@@ -25,7 +25,7 @@ public class DetalleCalificacionController {
     }
 
     /**
-     * Lista todos los detalles de calificación.
+     * Obtiene la lista de todos los detalles de calificación registrados.
      * GET /api/detalles
      * @return lista de DetalleCalificacion
      */
@@ -35,10 +35,10 @@ public class DetalleCalificacionController {
     }
 
     /**
-     * Busca un detalle por ID.
+     * Busca un detalle de calificación por su ID.
      * GET /api/detalles/{id}
-     * @param id ID del detalle
-     * @return DetalleCalificacion o 404
+     * @param id ID del detalle a buscar
+     * @return DetalleCalificacion si existe o 404 si no se encuentra
      */
     @GetMapping("/{id}")
     public ResponseEntity<DetalleCalificacion> byId(@PathVariable Long id) {
@@ -50,8 +50,8 @@ public class DetalleCalificacionController {
     /**
      * Crea un nuevo detalle de calificación.
      * POST /api/detalles
-     * @param d DetalleCalificacion a crear
-     * @return Detalle creado
+     * @param d DetalleCalificacion a crear (en el body)
+     * @return DetalleCalificacion creado
      */
     @PostMapping
     public DetalleCalificacion create(@RequestBody DetalleCalificacion d) {
@@ -59,25 +59,25 @@ public class DetalleCalificacionController {
     }
 
     /**
-     * Actualiza un detalle existente.
+     * Actualiza un detalle de calificación existente.
      * PUT /api/detalles/{id}
-     * @param id ID del detalle
-     * @param d Nuevos datos
-     * @return Detalle actualizado o 404
+     * @param id ID del detalle a actualizar
+     * @param d Objeto DetalleCalificacion con los datos nuevos
+     * @return DetalleCalificacion actualizado o 404 si no existe
      */
     @PutMapping("/{id}")
     public ResponseEntity<DetalleCalificacion> update(@PathVariable Long id,
-                                                      @RequestBody DetalleCalificacion d) {
+                                                     @RequestBody DetalleCalificacion d) {
         return service.findById(id)
                       .map(existing -> ResponseEntity.ok(service.update(id, d)))
                       .orElse(ResponseEntity.notFound().build());
     }
 
     /**
-     * Elimina un detalle por ID.
+     * Elimina un detalle de calificación por ID.
      * DELETE /api/detalles/{id}
      * @param id ID del detalle a eliminar
-     * @return 204 si fue eliminado
+     * @return 204 No Content si fue borrado
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

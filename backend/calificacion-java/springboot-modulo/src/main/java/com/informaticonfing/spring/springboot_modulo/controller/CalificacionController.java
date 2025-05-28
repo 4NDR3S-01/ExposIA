@@ -9,15 +9,16 @@ import com.informaticonfing.spring.springboot_modulo.service.CalificacionService
 
 /**
  * Controlador REST para la gestión de calificaciones.
- * Proporciona endpoints para CRUD de calificaciones globales generadas por la IA.
+ * Permite consultar, crear, actualizar y eliminar las evaluaciones de las grabaciones.
  */
 @RestController
 @RequestMapping("/api/calificaciones")
 public class CalificacionController {
+
     private final CalificacionService service;
 
     /**
-     * Constructor con inyección de dependencias.
+     * Constructor inyectando el servicio correspondiente.
      * @param service Servicio de Calificacion
      */
     public CalificacionController(CalificacionService service) {
@@ -25,7 +26,7 @@ public class CalificacionController {
     }
 
     /**
-     * Devuelve la lista de todas las calificaciones.
+     * Obtiene la lista de todas las calificaciones registradas.
      * GET /api/calificaciones
      * @return lista de Calificacion
      */
@@ -35,7 +36,7 @@ public class CalificacionController {
     }
 
     /**
-     * Devuelve una calificación por su ID.
+     * Busca una calificación por su ID.
      * GET /api/calificaciones/{id}
      * @param id ID de la calificación a buscar
      * @return Calificacion si existe o 404 si no se encuentra

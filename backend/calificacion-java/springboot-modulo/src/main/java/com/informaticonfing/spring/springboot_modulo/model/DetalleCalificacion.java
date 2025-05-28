@@ -3,8 +3,7 @@ package com.informaticonfing.spring.springboot_modulo.model;
 import jakarta.persistence.*;
 
 /**
- * Entidad que representa el puntaje asignado a una grabación según
- * un criterio de evaluación específico.
+ * Entidad para los detalles individuales de la calificación.
  */
 @Entity
 @Table(name = "detalle_calificacion")
@@ -14,38 +13,60 @@ public class DetalleCalificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Puntaje asignado en este detalle */
-    private double puntaje;
-
-    /** Calificación global a la que pertenece este detalle */
+    // Pertenece a una calificación
     @ManyToOne
     @JoinColumn(name = "calificacion_id")
     private Calificacion calificacion;
 
-    /** Criterio de evaluación asociado a este detalle */
+    // Relación con criterio de evaluación
     @ManyToOne
     @JoinColumn(name = "criterio_id")
-    private CriterioEvaluacion criterioEvaluacion;
+    private CriterioEvaluacion criterio;
 
-    public DetalleCalificacion() { }
+    // Puede ser null
+    @Column(name = "slide_id")
+    private Long slideId;
 
-    public DetalleCalificacion(double puntaje, Calificacion calificacion, CriterioEvaluacion criterioEvaluacion) {
-        this.puntaje = puntaje;
+    private Double puntaje;
+
+    private String comentario;
+
+    // Puede ser null
+    @Column(name = "fragmento_audio_id")
+    private Long fragmentoAudioId;
+
+    public DetalleCalificacion() {}
+
+    public DetalleCalificacion(Long id, Calificacion calificacion, CriterioEvaluacion criterio,
+                               Long slideId, Double puntaje, String comentario, Long fragmentoAudioId) {
+        this.id = id;
         this.calificacion = calificacion;
-        this.criterioEvaluacion = criterioEvaluacion;
+        this.criterio = criterio;
+        this.slideId = slideId;
+        this.puntaje = puntaje;
+        this.comentario = comentario;
+        this.fragmentoAudioId = fragmentoAudioId;
     }
 
-    // --- Getters y Setters ---
-
+    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public double getPuntaje() { return puntaje; }
-    public void setPuntaje(double puntaje) { this.puntaje = puntaje; }
 
     public Calificacion getCalificacion() { return calificacion; }
     public void setCalificacion(Calificacion calificacion) { this.calificacion = calificacion; }
 
-    public CriterioEvaluacion getCriterioEvaluacion() { return criterioEvaluacion; }
-    public void setCriterioEvaluacion(CriterioEvaluacion criterioEvaluacion) { this.criterioEvaluacion = criterioEvaluacion; }
+    public CriterioEvaluacion getCriterio() { return criterio; }
+    public void setCriterio(CriterioEvaluacion criterio) { this.criterio = criterio; }
+
+    public Long getSlideId() { return slideId; }
+    public void setSlideId(Long slideId) { this.slideId = slideId; }
+
+    public Double getPuntaje() { return puntaje; }
+    public void setPuntaje(Double puntaje) { this.puntaje = puntaje; }
+
+    public String getComentario() { return comentario; }
+    public void setComentario(String comentario) { this.comentario = comentario; }
+
+    public Long getFragmentoAudioId() { return fragmentoAudioId; }
+    public void setFragmentoAudioId(Long fragmentoAudioId) { this.fragmentoAudioId = fragmentoAudioId; }
 }

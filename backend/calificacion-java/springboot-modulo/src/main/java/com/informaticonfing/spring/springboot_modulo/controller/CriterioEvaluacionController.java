@@ -9,7 +9,7 @@ import com.informaticonfing.spring.springboot_modulo.service.CriterioEvaluacionS
 
 /**
  * Controlador REST para la gestión de criterios de evaluación.
- * Cada criterio define un aspecto bajo el cual se evalúa una grabación.
+ * Permite realizar operaciones CRUD sobre los criterios utilizados para calificar grabaciones.
  */
 @RestController
 @RequestMapping("/api/criterios")
@@ -17,7 +17,7 @@ public class CriterioEvaluacionController {
     private final CriterioEvaluacionService service;
 
     /**
-     * Constructor con inyección del servicio.
+     * Constructor inyectando el servicio correspondiente.
      * @param service Servicio de CriterioEvaluacion
      */
     public CriterioEvaluacionController(CriterioEvaluacionService service) {
@@ -25,7 +25,7 @@ public class CriterioEvaluacionController {
     }
 
     /**
-     * Lista todos los criterios de evaluación.
+     * Obtiene la lista de todos los criterios de evaluación existentes.
      * GET /api/criterios
      * @return lista de CriterioEvaluacion
      */
@@ -35,10 +35,10 @@ public class CriterioEvaluacionController {
     }
 
     /**
-     * Devuelve un criterio por su ID.
+     * Busca un criterio de evaluación por ID.
      * GET /api/criterios/{id}
-     * @param id ID del criterio
-     * @return CriterioEvaluacion o 404 si no existe
+     * @param id ID del criterio a buscar
+     * @return CriterioEvaluacion si existe o 404 si no se encuentra
      */
     @GetMapping("/{id}")
     public ResponseEntity<CriterioEvaluacion> byId(@PathVariable Long id) {
@@ -48,10 +48,10 @@ public class CriterioEvaluacionController {
     }
 
     /**
-     * Crea un nuevo criterio.
+     * Crea un nuevo criterio de evaluación.
      * POST /api/criterios
-     * @param c CriterioEvaluacion a crear
-     * @return Criterio creado
+     * @param c Objeto CriterioEvaluacion en el body
+     * @return CriterioEvaluacion creado
      */
     @PostMapping
     public CriterioEvaluacion create(@RequestBody CriterioEvaluacion c) {
@@ -59,11 +59,11 @@ public class CriterioEvaluacionController {
     }
 
     /**
-     * Actualiza un criterio existente.
+     * Actualiza un criterio de evaluación existente.
      * PUT /api/criterios/{id}
      * @param id ID del criterio a actualizar
-     * @param c Criterio con nuevos datos
-     * @return Criterio actualizado o 404 si no existe
+     * @param c Objeto CriterioEvaluacion con los datos nuevos
+     * @return CriterioEvaluacion actualizado o 404 si no existe
      */
     @PutMapping("/{id}")
     public ResponseEntity<CriterioEvaluacion> update(@PathVariable Long id,
@@ -74,7 +74,7 @@ public class CriterioEvaluacionController {
     }
 
     /**
-     * Elimina un criterio por ID.
+     * Elimina un criterio de evaluación por ID.
      * DELETE /api/criterios/{id}
      * @param id ID del criterio a eliminar
      * @return 204 si se borró correctamente
