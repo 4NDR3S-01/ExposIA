@@ -6,6 +6,7 @@ import { Slide } from './externos/slide.entity'; // Si decides incluirla como re
 //import { FragmentoAudio } from './fragmento-audio.entity';
 //import { HistorialPractica } from './historial-practica.entity';
 //import { NotaSlide } from './nota-slide.entity';
+import { NavegacionSlide } from './navegacion_slide.entity'; // Asegúrate de que la ruta sea correcta
 
 @Entity('grabaciones')
 export class Grabacion {
@@ -27,6 +28,9 @@ export class Grabacion {
 
   @Column({ name: 'nombre_archivo', type: 'varchar', length: 255 })
   nombreArchivo: string;
+
+  @OneToMany(() => NavegacionSlide, nav => nav.grabacion)
+  navegaciones: NavegacionSlide[];
 
 
   // Relaciones desactivadas temporalmente

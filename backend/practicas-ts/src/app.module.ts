@@ -5,6 +5,12 @@ import { GrabacionService } from './services/grabacion.service';
 import { GrabacionController } from './controllers/grabacion.controller';
 import { GrabacionModule } from './grabacion.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { CrearGrabacionUseCase } from './use-cases/crear-grabacion.use-case';
+import { NavegacionSlide } from './models/navegacion_slide.entity';
+import { NavegacionSlideController } from './controllers/navegacion-slide.controller';
+import { NavegacionSlideModule } from './navegacion-slide.module';
+import { FragmentoAudio } from './models/fragmento_audio.entity';
+import { FragmentoAudioModule } from './fragmento-audio.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -14,17 +20,19 @@ import { MulterModule } from '@nestjs/platform-express';
       username: 'exposia',
       password: 'exposia123',
       database: 'exposia_db',
-      entities: [__dirname + '/models/*.entity.ts'],
+      entities: [Grabacion, NavegacionSlide],
       autoLoadEntities: true, 
       synchronize: true,
     }),
     GrabacionModule,
+    NavegacionSlideModule,
+    FragmentoAudioModule,
     TypeOrmModule.forFeature([Grabacion]),
     MulterModule.register({
       dest: './uploads/audio',
     }),
   ],
-  controllers: [GrabacionController],
-  providers: [GrabacionService],
+  controllers: [],
+  providers: [CrearGrabacionUseCase],
 })
 export class AppModule {}

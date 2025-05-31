@@ -70,3 +70,16 @@ npm install typeorm @nestjs/typeorm pg
 hay que instalar el multer de express
 
 El dto de grabaciones no se usa por ahora porque existe conflicto ya que al ser un modulo que maneja mp3 Eso es porque el @Body() en multipart se recibe como string plano y Nest no hace casting automático a number si el campo está acompañado de un archivo.
+
+# 30-5 
+
+Se cambio la arquitectura para definir Casos de Uso, asi el controlador solo llama a estos en vez de declarar toda la logica, se avanzo hasta crear fragmento de audio y navegacion slide
+
+# 31-5
+
+Ya con el modulo guardando fragmento audio guardando timestamps de inicio y fin procedemos a intalar 
+
+npm install fluent-ffmpeg
+npm install @ffmpeg-installer/ffmpeg
+
+Ahora procedemos a mejorar el modulo para eu tome el archivo de grabacion, lea los timestamps de cada FragmentoAudio, cree un nuevo archivo .mp3 y actualice el campo archivo_fragmento

@@ -9,10 +9,10 @@ export class CreateFragmentoAudioDto {
     slide_id: number;
 
     @IsInt()
-    inicio: number; // Timestamp de inicio del fragmento en milisegundos
+    inicio_segundo: number; // Timestamp de inicio del fragmento en milisegundos
 
     @IsInt()
-    fin: number; // Timestamp de fin del fragmento en milisegundos
+    fin_segundo: number; // Timestamp de fin del fragmento en milisegundos
 
     @IsOptional()
     @IsString()
