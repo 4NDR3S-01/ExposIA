@@ -14,7 +14,9 @@ public class CriterioEvaluacion {
     private Long id;
 
     private String nombre;
+
     private String descripcion;
+
     private Double peso;
 
     public CriterioEvaluacion() {}

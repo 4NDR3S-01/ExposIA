@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
 import com.informaticonfing.spring.springboot_modulo.service.ParametrosIdealesService;
+import com.informaticonfing.spring.springboot_modulo.util.ParametrosIdealesConstantes;
 
 /**
  * Controlador REST para los parámetros ideales de evaluación.
- * Permite consultar y modificar los parámetros base contra los que se compara cada grabación.
+ * Permite consultar, modificar y exponer el estándar global de parámetros ideales.
  */
 @RestController
 @RequestMapping("/api/parametros")
@@ -83,5 +84,20 @@ public class ParametrosIdealesController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Devuelve los parámetros ideales estándar definidos en código.
+     * GET /api/parametros/estandar
+     * @return ParametrosIdeales con valores globales (solo lectura)
+     */
+    @GetMapping("/estandar")
+    public ParametrosIdeales getParametrosEstandar() {
+        ParametrosIdeales p = new ParametrosIdeales();
+        p.setClaridadIdeal(ParametrosIdealesConstantes.CLARIDAD_IDEAL);
+        p.setVelocidadIdeal(ParametrosIdealesConstantes.VELOCIDAD_IDEAL);
+        p.setPausasIdeales(ParametrosIdealesConstantes.PAUSAS_IDEALES);
+        p.setOtrosParametros(null);
+        return p;
     }
 }

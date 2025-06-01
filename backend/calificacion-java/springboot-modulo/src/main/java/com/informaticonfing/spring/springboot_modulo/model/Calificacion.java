@@ -14,16 +14,16 @@ public class Calificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Solo se guarda el ID de la grabación, no la entidad completa
+    // Relación con grabaciones (solo almacena el ID por eficiencia)
     @Column(name = "grabacion_id")
     private Long grabacionId;
 
-    // Puede ser null si es IA
+    // Relación con usuarios (puede ser null si es IA)
     @Column(name = "usuario_id")
     private Long usuarioId;
 
-    @Column(name = "puntaje_total")
-    private Double puntajeTotal;
+    @Column(name = "puntaje_global")
+    private Double puntajeGlobal;
 
     @Column(name = "observacion_global")
     private String observacionGlobal;
@@ -31,20 +31,22 @@ public class Calificacion {
     @Column(name = "tipo_calificacion")
     private String tipoCalificacion; // ej: "ia", "manual", "final"
 
+    @Column(name = "fecha")
     private LocalDateTime fecha;
 
+    // Relación con parámetros ideales
     @ManyToOne
     @JoinColumn(name = "parametros_id")
     private ParametrosIdeales parametrosIdeales;
 
     public Calificacion() {}
 
-    public Calificacion(Long id, Long grabacionId, Long usuarioId, Double puntajeTotal, String observacionGlobal,
+    public Calificacion(Long id, Long grabacionId, Long usuarioId, Double puntajeGlobal, String observacionGlobal,
                         String tipoCalificacion, LocalDateTime fecha, ParametrosIdeales parametrosIdeales) {
         this.id = id;
         this.grabacionId = grabacionId;
         this.usuarioId = usuarioId;
-        this.puntajeTotal = puntajeTotal;
+        this.puntajeGlobal = puntajeGlobal;
         this.observacionGlobal = observacionGlobal;
         this.tipoCalificacion = tipoCalificacion;
         this.fecha = fecha;
@@ -61,8 +63,8 @@ public class Calificacion {
     public Long getUsuarioId() { return usuarioId; }
     public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
 
-    public Double getPuntajeTotal() { return puntajeTotal; }
-    public void setPuntajeTotal(Double puntajeTotal) { this.puntajeTotal = puntajeTotal; }
+    public Double getPuntajeGlobal() { return puntajeGlobal; }
+    public void setPuntajeGlobal(Double puntajeGlobal) { this.puntajeGlobal = puntajeGlobal; }
 
     public String getObservacionGlobal() { return observacionGlobal; }
     public void setObservacionGlobal(String observacionGlobal) { this.observacionGlobal = observacionGlobal; }

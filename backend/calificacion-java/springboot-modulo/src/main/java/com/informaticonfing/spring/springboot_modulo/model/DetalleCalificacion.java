@@ -23,11 +23,11 @@ public class DetalleCalificacion {
     @JoinColumn(name = "criterio_id")
     private CriterioEvaluacion criterio;
 
-    // Puede ser null
-    @Column(name = "slide_id")
+    // Slide relacionado
+    @Column(name = "slide_ide")
     private Long slideId;
 
-    private Double puntaje;
+    private Integer puntaje;
 
     private String comentario;
 
@@ -38,7 +38,7 @@ public class DetalleCalificacion {
     public DetalleCalificacion() {}
 
     public DetalleCalificacion(Long id, Calificacion calificacion, CriterioEvaluacion criterio,
-                               Long slideId, Double puntaje, String comentario, Long fragmentoAudioId) {
+                               Long slideId, Integer puntaje, String comentario, Long fragmentoAudioId) {
         this.id = id;
         this.calificacion = calificacion;
         this.criterio = criterio;
@@ -61,8 +61,8 @@ public class DetalleCalificacion {
     public Long getSlideId() { return slideId; }
     public void setSlideId(Long slideId) { this.slideId = slideId; }
 
-    public Double getPuntaje() { return puntaje; }
-    public void setPuntaje(Double puntaje) { this.puntaje = puntaje; }
+    public Integer getPuntaje() { return puntaje; }
+    public void setPuntaje(Integer puntaje) { this.puntaje = puntaje; }
 
     public String getComentario() { return comentario; }
     public void setComentario(String comentario) { this.comentario = comentario; }

@@ -13,17 +13,20 @@ public class ParametrosIdeales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "claridad_ideal")
     private Double claridadIdeal;
+
+    @Column(name = "velocidad_ideal")
     private Double velocidadIdeal;
+
+    @Column(name = "pausas_ideales")
     private Double pausasIdeales;
 
-    @Column(columnDefinition = "TEXT")
-    private String otrosParametros; // JSON como texto
+    @Column(name = "otros_parametros", columnDefinition = "TEXT")
+    private String otrosParametros; // Puede almacenar un JSON como texto
 
-    // Constructor vacío
     public ParametrosIdeales() {}
 
-    // Constructor completo
     public ParametrosIdeales(Long id, Double claridadIdeal, Double velocidadIdeal, Double pausasIdeales, String otrosParametros) {
         this.id = id;
         this.claridadIdeal = claridadIdeal;

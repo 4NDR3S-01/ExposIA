@@ -20,7 +20,9 @@ public class FeedbackCalificacion {
     private Calificacion calificacion;
 
     private String observacion;
+
     private LocalDateTime fecha;
+
     private String autor;
 
     public FeedbackCalificacion() {}
