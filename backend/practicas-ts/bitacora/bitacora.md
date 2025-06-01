@@ -83,3 +83,6 @@ npm install fluent-ffmpeg
 npm install @ffmpeg-installer/ffmpeg
 
 Ahora procedemos a mejorar el modulo para eu tome el archivo de grabacion, lea los timestamps de cada FragmentoAudio, cree un nuevo archivo .mp3 y actualice el campo archivo_fragmento
+
+
+npm install @ffprobe-installer/ffprobe

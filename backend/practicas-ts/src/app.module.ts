@@ -11,6 +11,8 @@ import { NavegacionSlideController } from './controllers/navegacion-slide.contro
 import { NavegacionSlideModule } from './navegacion-slide.module';
 import { FragmentoAudio } from './models/fragmento_audio.entity';
 import { FragmentoAudioModule } from './fragmento-audio.module';
+import { DebugModule } from './debug.module';
+import { NotaSlideModule } from './nota-slide.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -20,13 +22,15 @@ import { FragmentoAudioModule } from './fragmento-audio.module';
       username: 'exposia',
       password: 'exposia123',
       database: 'exposia_db',
-      entities: [Grabacion, NavegacionSlide],
+      entities: [Grabacion, NavegacionSlide, FragmentoAudio],
       autoLoadEntities: true, 
       synchronize: true,
     }),
     GrabacionModule,
     NavegacionSlideModule,
     FragmentoAudioModule,
+    DebugModule,
+    NotaSlideModule,
     TypeOrmModule.forFeature([Grabacion]),
     MulterModule.register({
       dest: './uploads/audio',
