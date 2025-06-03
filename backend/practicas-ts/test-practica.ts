@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as FormData from 'form-data';
 
 const api = 'http://localhost:3000';
-const audioPath = './1mb.mp3'; //
+const audioPath = './1mb.mp3';
 const reportePath = './reporte-practica.txt';
 
 const log: string[] = [];
@@ -40,6 +40,7 @@ async function crearNavegaciones(grabacion_id: number) {
     { slide_id: 1, timestamp: 0, tipo_navegacion: 'inicio' },
     { slide_id: 2, timestamp: 5000, tipo_navegacion: 'siguiente' },
     { slide_id: 3, timestamp: 10000, tipo_navegacion: 'siguiente' },
+    { slide_id: 4, timestamp: 15000, tipo_navegacion: 'siguiente' },
   ];
 
   for (const evento of eventos) {
@@ -48,30 +49,60 @@ async function crearNavegaciones(grabacion_id: number) {
   }
 }
 
-async function crearNota(grabacion_id: number) {
-  registrarLinea('\n📝 Añadiendo nota al slide 3...');
-  const nota = {
-    grabacion_id,
-    slide_id: 3,
-    contenido: 'Nota generada automáticamente',
-    timestamp: 12000,
-  };
+async function crearNotas(grabacion_id: number) {
+  registrarLinea('\n📝 Añadiendo notas a cada slide...');
+  const notas = [
+    { slide_id: 1, timestamp: 1000 },
+    { slide_id: 2, timestamp: 6000 },
+    { slide_id: 3, timestamp: 11000 },
+    { slide_id: 4, timestamp: 16000 },
+  ];
 
-  const response = await axios.post(`${api}/nota-slide`, nota);
-  registrarLinea(`✅ Nota creada: ID=${response.data.id}`);
+  for (const nota of notas) {
+    const response = await axios.post(`${api}/nota-slide`, {
+      grabacion_id,
+      slide_id: nota.slide_id,
+      contenido: `Nota generada para slide ${nota.slide_id}`,
+      timestamp: nota.timestamp,
+    });
+
+    registrarLinea(`📝 Nota para slide ${nota.slide_id} creada: ID=${response.data.id}`);
+  }
 }
 
-async function crearFragmento(grabacion_id: number) {
-  registrarLinea('\n🎧 Generando fragmento de audio...');
-  const dto = {
-    grabacion_id,
-    slide_id: 3,
-    inicio_segundo: 10000,
-    fin_segundo: 12000,
-  };
+async function crearFragmentos(grabacion_id: number) {
+  registrarLinea('\n🎧 Generando fragmentos por slide...');
+  const fragmentos = [
+    { slide_id: 1, inicio: 0, fin: 5 },
+    { slide_id: 2, inicio: 5, fin: 10 },
+    { slide_id: 3, inicio: 10, fin: 15 },
+    { slide_id: 4, inicio: 15, fin: 20 },
+  ];
 
-  const response = await axios.post(`${api}/fragmento-audio`, dto);
-  registrarLinea(`✅ Fragmento creado: ${JSON.stringify(response.data)}`);
+  for (const frag of fragmentos) {
+    const dto = {
+      grabacion_id,
+      slide_id: frag.slide_id,
+      inicio_segundo: frag.inicio * 1000,
+      fin_segundo: frag.fin * 1000,
+    };
+
+    const response = await axios.post(`${api}/fragmento-audio`, dto);
+    registrarLinea(`🎧 Fragmento slide ${frag.slide_id}: archivo=${response.data.ruta_archivo}`);
+  }
+}
+
+async function registrarHistorial(grabacion_id: number) {
+  registrarLinea('\n📘 Registrando historial de práctica...');
+  const response = await axios.post(`${api}/api/historial-practica`, {
+    grabacion_id,
+    duracion_total: 74140,
+    fecha_inicio: '2025-06-01T10:00:00.000Z',
+    fecha_fin: '2025-06-01T10:15:00.000Z',
+    finalizado: true,
+  });
+
+  registrarLinea(`📘 Historial registrado con ID=${response.data.id}`);
 }
 
 async function main() {
@@ -80,8 +111,9 @@ async function main() {
 
     const grabacionId = await subirGrabacion();
     await crearNavegaciones(grabacionId);
-    await crearNota(grabacionId);
-    await crearFragmento(grabacionId);
+    await crearNotas(grabacionId);
+    await crearFragmentos(grabacionId);
+    await registrarHistorial(grabacionId);
 
     registrarLinea('\n✅ Flujo completo ejecutado correctamente');
   } catch (err: any) {

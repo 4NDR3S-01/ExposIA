@@ -86,3 +86,9 @@ Ahora procedemos a mejorar el modulo para eu tome el archivo de grabacion, lea l
 
 
 npm install @ffprobe-installer/ffprobe
+
+
+para iniciar el proyecto
+Npm start
+
+Para hacer el get general del modulo en Postman GET http://localhost:3000/debug/resumen/8

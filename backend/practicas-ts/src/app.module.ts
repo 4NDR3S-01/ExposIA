@@ -13,6 +13,7 @@ import { FragmentoAudio } from './models/fragmento_audio.entity';
 import { FragmentoAudioModule } from './fragmento-audio.module';
 import { DebugModule } from './debug.module';
 import { NotaSlideModule } from './nota-slide.module';
+import { HistorialPracticaModule } from './historial-practica.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -31,6 +32,7 @@ import { NotaSlideModule } from './nota-slide.module';
     FragmentoAudioModule,
     DebugModule,
     NotaSlideModule,
+    HistorialPracticaModule,
     TypeOrmModule.forFeature([Grabacion]),
     MulterModule.register({
       dest: './uploads/audio',
