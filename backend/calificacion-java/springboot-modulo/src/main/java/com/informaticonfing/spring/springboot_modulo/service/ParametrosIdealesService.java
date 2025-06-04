@@ -1,15 +1,16 @@
 package com.informaticonfing.spring.springboot_modulo.service;
 
+import com.informaticonfing.spring.springboot_modulo.dto.ParametrosIdealesRequestDTO;
+import com.informaticonfing.spring.springboot_modulo.dto.ParametrosIdealesResponseDTO;
+import com.informaticonfing.spring.springboot_modulo.mapper.ParametrosIdealesMapper;
 import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
 import com.informaticonfing.spring.springboot_modulo.repository.ParametrosIdealesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-/**
- * Servicio para la lógica de negocio de ParametrosIdeales.
- */
 @Service
 public class ParametrosIdealesService {
     private final ParametrosIdealesRepository repository;
@@ -18,38 +19,27 @@ public class ParametrosIdealesService {
         this.repository = repository;
     }
 
-    /**
-     * Lista todos los parámetros ideales.
-     */
-    public List<ParametrosIdeales> findAll() {
-        return repository.findAll();
+    public List<ParametrosIdealesResponseDTO> findAll() {
+        return repository.findAll().stream().map(ParametrosIdealesMapper::toDTO).collect(Collectors.toList());
     }
 
-    /**
-     * Busca un parámetro ideal por ID.
-     */
-    public Optional<ParametrosIdeales> findById(Long id) {
-        return repository.findById(id);
+    public Optional<ParametrosIdealesResponseDTO> findById(Long id) {
+        return repository.findById(id).map(ParametrosIdealesMapper::toDTO);
     }
 
-    /**
-     * Crea un nuevo parámetro ideal.
-     */
-    public ParametrosIdeales create(ParametrosIdeales p) {
-        return repository.save(p);
+    public ParametrosIdealesResponseDTO create(ParametrosIdealesRequestDTO dto) {
+        ParametrosIdeales entidad = ParametrosIdealesMapper.toEntity(dto);
+        ParametrosIdeales saved = repository.save(entidad);
+        return ParametrosIdealesMapper.toDTO(saved);
     }
 
-    /**
-     * Actualiza un parámetro ideal existente.
-     */
-    public ParametrosIdeales update(Long id, ParametrosIdeales p) {
-        p.setId(id);
-        return repository.save(p);
+    public ParametrosIdealesResponseDTO update(Long id, ParametrosIdealesRequestDTO dto) {
+        ParametrosIdeales entidad = ParametrosIdealesMapper.toEntity(dto);
+        entidad.setId(id);
+        ParametrosIdeales saved = repository.save(entidad);
+        return ParametrosIdealesMapper.toDTO(saved);
     }
 
-    /**
-     * Elimina un parámetro ideal por ID.
-     */
     public void delete(Long id) {
         repository.deleteById(id);
     }

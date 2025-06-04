@@ -23,7 +23,7 @@
   </properties>
 
   <dependencies>
-    <!-- Web + Thymeleaf -->
+    <!-- Spring Boot Web + Thymeleaf -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -32,43 +32,72 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
+    <!-- DevTools: recarga automática para desarrollo -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
+
+    <!-- Starter para pruebas unitarias -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
-    <!-- JPA / Hibernate -->
+    <!-- Spring Security -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JPA/Hibernate -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- H2 (para pruebas locales) -->
+    <!-- PostgreSQL Driver: solo producción -->
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
 
-    <!-- MySQL Connector (para conexión a MySQL) -->
+    <!-- H2 Database: SOLO para tests/integración -->
     <dependency>
-  <groupId>mysql</groupId>
-  <artifactId>mysql-connector-java</artifactId>
-  <version>8.0.33</version>
-  <scope>runtime</scope>
-</dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
 
+    <!-- JWT (opcional): si usas tokens JWT -->
+    <!--
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.9.1</version>
+    </dependency>
+    -->
   </dependencies>
 
   <build>
     <plugins>
+      <!-- Plugin para empaquetar y correr aplicaciones Spring Boot -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

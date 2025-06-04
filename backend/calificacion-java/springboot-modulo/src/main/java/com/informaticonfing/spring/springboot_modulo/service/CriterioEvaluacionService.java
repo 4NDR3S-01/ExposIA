@@ -1,15 +1,16 @@
 package com.informaticonfing.spring.springboot_modulo.service;
 
+import com.informaticonfing.spring.springboot_modulo.dto.CriterioEvaluacionRequestDTO;
+import com.informaticonfing.spring.springboot_modulo.dto.CriterioEvaluacionResponseDTO;
+import com.informaticonfing.spring.springboot_modulo.mapper.CriterioEvaluacionMapper;
 import com.informaticonfing.spring.springboot_modulo.model.CriterioEvaluacion;
 import com.informaticonfing.spring.springboot_modulo.repository.CriterioEvaluacionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-/**
- * Servicio para la lógica de negocio de CriterioEvaluacion.
- */
 @Service
 public class CriterioEvaluacionService {
     private final CriterioEvaluacionRepository repository;
@@ -18,21 +19,25 @@ public class CriterioEvaluacionService {
         this.repository = repository;
     }
 
-    public List<CriterioEvaluacion> findAll() {
-        return repository.findAll();
+    public List<CriterioEvaluacionResponseDTO> findAll() {
+        return repository.findAll().stream().map(CriterioEvaluacionMapper::toDTO).collect(Collectors.toList());
     }
 
-    public Optional<CriterioEvaluacion> findById(Long id) {
-        return repository.findById(id);
+    public Optional<CriterioEvaluacionResponseDTO> findById(Long id) {
+        return repository.findById(id).map(CriterioEvaluacionMapper::toDTO);
     }
 
-    public CriterioEvaluacion create(CriterioEvaluacion c) {
-        return repository.save(c);
+    public CriterioEvaluacionResponseDTO create(CriterioEvaluacionRequestDTO dto) {
+        CriterioEvaluacion entidad = CriterioEvaluacionMapper.toEntity(dto);
+        CriterioEvaluacion saved = repository.save(entidad);
+        return CriterioEvaluacionMapper.toDTO(saved);
     }
 
-    public CriterioEvaluacion update(Long id, CriterioEvaluacion c) {
-        c.setId(id);
-        return repository.save(c);
+    public CriterioEvaluacionResponseDTO update(Long id, CriterioEvaluacionRequestDTO dto) {
+        CriterioEvaluacion entidad = CriterioEvaluacionMapper.toEntity(dto);
+        entidad.setId(id);
+        CriterioEvaluacion saved = repository.save(entidad);
+        return CriterioEvaluacionMapper.toDTO(saved);
     }
 
     public void delete(Long id) {
