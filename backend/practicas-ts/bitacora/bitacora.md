@@ -89,6 +89,12 @@ npm install @ffprobe-installer/ffprobe
 
 
 para iniciar el proyecto
+
+ docker compose up
+
+ 
 Npm start
 
 Para hacer el get general del modulo en Postman GET http://localhost:3000/debug/resumen/8
+
+Para probar el test de todo el flujo DESDE LA CARPETA RAIZ PRACTICAS-TS npx ts-node test-practica.ts

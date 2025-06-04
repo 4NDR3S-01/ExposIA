@@ -1,10 +1,13 @@
 import axios from 'axios';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const api = 'http://localhost:3000';
 const audioPath = './1mb.mp3';
 const reportePath = './reporte-practica.txt';
+const token = process.env.API_KEY ?? 'mi-token-seguro';
 
 const log: string[] = [];
 
@@ -27,7 +30,10 @@ async function subirGrabacion() {
   form.append('nombreArchivo', 'test-audio.mp3');
 
   const response = await axios.post(`${api}/grabacion/subir`, form, {
-    headers: form.getHeaders(),
+    headers: {
+      ...form.getHeaders(),
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   registrarLinea(`✅ Grabación subida: ID=${response.data.id}`);
@@ -44,7 +50,11 @@ async function crearNavegaciones(grabacion_id: number) {
   ];
 
   for (const evento of eventos) {
-    await axios.post(`${api}/navegacion-slide`, { grabacion_id, ...evento });
+    await axios.post(`${api}/navegacion-slide`, { grabacion_id, ...evento }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     registrarLinea(`✔️ Evento: slide ${evento.slide_id}, ts=${evento.timestamp}, tipo=${evento.tipo_navegacion}`);
   }
 }
@@ -64,6 +74,10 @@ async function crearNotas(grabacion_id: number) {
       slide_id: nota.slide_id,
       contenido: `Nota generada para slide ${nota.slide_id}`,
       timestamp: nota.timestamp,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     registrarLinea(`📝 Nota para slide ${nota.slide_id} creada: ID=${response.data.id}`);
@@ -87,7 +101,12 @@ async function crearFragmentos(grabacion_id: number) {
       fin_segundo: frag.fin * 1000,
     };
 
-    const response = await axios.post(`${api}/fragmento-audio`, dto);
+    const response = await axios.post(`${api}/fragmento-audio`, dto, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     registrarLinea(`🎧 Fragmento slide ${frag.slide_id}: archivo=${response.data.ruta_archivo}`);
   }
 }
@@ -100,6 +119,10 @@ async function registrarHistorial(grabacion_id: number) {
     fecha_inicio: '2025-06-01T10:00:00.000Z',
     fecha_fin: '2025-06-01T10:15:00.000Z',
     finalizado: true,
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   registrarLinea(`📘 Historial registrado con ID=${response.data.id}`);
