@@ -1,42 +1,56 @@
-// src/main/java/com/informaticonfing/spring/springboot_modulo/service/ParametrosIdealesService.java
 package com.informaticonfing.spring.springboot_modulo.service;
+
+import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
+import com.informaticonfing.spring.springboot_modulo.repository.ParametrosIdealesRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
-import com.informaticonfing.spring.springboot_modulo.repository.ParametrosIdealesRepository;
-
+/**
+ * Servicio para la lógica de negocio de ParametrosIdeales.
+ */
 @Service
-@Transactional
 public class ParametrosIdealesService {
-    private final ParametrosIdealesRepository repo;
+    private final ParametrosIdealesRepository repository;
 
-    public ParametrosIdealesService(ParametrosIdealesRepository repo) {
-        this.repo = repo;
+    public ParametrosIdealesService(ParametrosIdealesRepository repository) {
+        this.repository = repository;
     }
 
-    public ParametrosIdeales create(ParametrosIdeales p) {
-        return repo.save(p);
-    }
-
+    /**
+     * Lista todos los parámetros ideales.
+     */
     public List<ParametrosIdeales> findAll() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
+    /**
+     * Busca un parámetro ideal por ID.
+     */
     public Optional<ParametrosIdeales> findById(Long id) {
-        return repo.findById(id);
+        return repository.findById(id);
     }
 
+    /**
+     * Crea un nuevo parámetro ideal.
+     */
+    public ParametrosIdeales create(ParametrosIdeales p) {
+        return repository.save(p);
+    }
+
+    /**
+     * Actualiza un parámetro ideal existente.
+     */
     public ParametrosIdeales update(Long id, ParametrosIdeales p) {
-        p.setId(id);         // ahora existe
-        return repo.save(p); // y save() es visible
+        p.setId(id);
+        return repository.save(p);
     }
 
+    /**
+     * Elimina un parámetro ideal por ID.
+     */
     public void delete(Long id) {
-        repo.deleteById(id);
+        repository.deleteById(id);
     }
 }

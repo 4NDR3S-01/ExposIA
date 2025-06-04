@@ -1,43 +1,54 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config'; // <-- importante
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MulterModule } from '@nestjs/platform-express';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Grabacion } from './models/grabacion.entity';
+import { NavegacionSlide } from './models/navegacion_slide.entity';
+import { FragmentoAudio } from './models/fragmento_audio.entity';
 
-import { GrabacionesModule } from './grabaciones/grabaciones.module';
-import { NavegacionSlidesModule } from './navegacion-slides/navegacion-slides.module';
-import { CalificacionesModule } from './calificaciones/calificaciones.module';
-import { HistorialPracticasModule } from './historial-practicas/historial-practicas.module';
-import { TiemposSlideModule } from './tiempos-slide/tiempos-slide.module';
+import { GrabacionModule } from './grabacion.module';
+import { NavegacionSlideModule } from './navegacion-slide.module';
+import { FragmentoAudioModule } from './fragmento-audio.module';
+import { DebugModule } from './debug.module';
+import { NotaSlideModule } from './nota-slide.module';
+import { HistorialPracticaModule } from './historial-practica.module';
+
+import { CrearGrabacionUseCase } from './use-cases/crear-grabacion.use-case';
+import { AuthMiddleware } from './common/middleware/api-key.middleware';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Module({
   imports: [
-    // 🟢 Cargar variables de entorno
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-
-    // 🟢 Conexión a PostgreSQL usando TypeORM
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432'),
-      username: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'postgres',
-      database: process.env.DB_NAME || 'exposia',
+      host: 'localhost',
+      port: 5432,
+      username: 'exposia',
+      password: 'exposia123',
+      database: 'exposia_db',
+      entities: [Grabacion, NavegacionSlide, FragmentoAudio],
       autoLoadEntities: true,
-      synchronize: true, // Solo para desarrollo, no usar en producción
+      synchronize: true,
     }),
-
-    // Módulos del sistema
-    GrabacionesModule,
-    NavegacionSlidesModule,
-    CalificacionesModule,
-    HistorialPracticasModule,
-    TiemposSlideModule,
+    GrabacionModule,
+    NavegacionSlideModule,
+    FragmentoAudioModule,
+    DebugModule,
+    NotaSlideModule,
+    HistorialPracticaModule,
+    TypeOrmModule.forFeature([Grabacion]),
+    MulterModule.register({
+      dest: './uploads/audio',
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [CrearGrabacionUseCase],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes('*'); // o una ruta específica como '/api/*'
+  }
+}
