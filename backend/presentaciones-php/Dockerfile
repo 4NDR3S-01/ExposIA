@@ -1,27 +1,30 @@
-# backend/presentaciones-php/Dockerfile
+# Usa una imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Instala dependencias del sistema y extensiones necesarias
+# Instala dependencias necesarias
 RUN apt-get update && apt-get install -y \
-    git zip unzip curl libpq-dev libonig-dev libxml2-dev libzip-dev \
+    git unzip zip curl libpq-dev libonig-dev libxml2-dev libzip-dev \
     && docker-php-ext-install pdo pdo_mysql zip
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia los archivos del proyecto
+# Copia los archivos del proyecto al contenedor
 COPY . /var/www/html
 
 WORKDIR /var/www/html
 
-# Da permisos a Laravel
+# Ejecuta composer install para generar la carpeta vendor
+RUN composer install --no-dev --optimize-autoloader
+
+# Otorga permisos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Habilita mod_rewrite para Apache
+# Habilita mod_rewrite
 RUN a2enmod rewrite
 
-# Expone el puerto 80
+# Expone el puerto
 EXPOSE 80
 
 # Comando para iniciar Laravel
