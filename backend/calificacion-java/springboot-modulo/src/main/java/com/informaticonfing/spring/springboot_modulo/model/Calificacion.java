@@ -3,9 +3,6 @@ package com.informaticonfing.spring.springboot_modulo.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Entidad principal para la evaluación/calificación.
- */
 @Entity
 @Table(name = "calificaciones")
 public class Calificacion {
@@ -14,11 +11,9 @@ public class Calificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación con grabaciones (solo almacena el ID por eficiencia)
     @Column(name = "grabacion_id")
     private Long grabacionId;
 
-    // Relación con usuarios (puede ser null si es IA)
     @Column(name = "usuario_id")
     private Long usuarioId;
 
@@ -29,12 +24,11 @@ public class Calificacion {
     private String observacionGlobal;
 
     @Column(name = "tipo_calificacion")
-    private String tipoCalificacion; // ej: "ia", "manual", "final"
+    private String tipoCalificacion;
 
     @Column(name = "fecha")
     private LocalDateTime fecha;
 
-    // Relación con parámetros ideales
     @ManyToOne
     @JoinColumn(name = "parametros_id")
     private ParametrosIdeales parametrosIdeales;
@@ -53,7 +47,6 @@ public class Calificacion {
         this.parametrosIdeales = parametrosIdeales;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

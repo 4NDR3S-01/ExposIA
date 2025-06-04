@@ -6,6 +6,7 @@ import com.informaticonfing.spring.springboot_modulo.model.Calificacion;
 import com.informaticonfing.spring.springboot_modulo.model.FeedbackCalificacion;
 
 public class FeedbackCalificacionMapper {
+
     public static FeedbackCalificacion toEntity(FeedbackCalificacionRequestDTO dto, Calificacion calificacion) {
         FeedbackCalificacion f = new FeedbackCalificacion();
         f.setCalificacion(calificacion);
@@ -14,6 +15,7 @@ public class FeedbackCalificacionMapper {
         f.setAutor(dto.getAutor());
         return f;
     }
+
     public static FeedbackCalificacionResponseDTO toDTO(FeedbackCalificacion f) {
         FeedbackCalificacionResponseDTO dto = new FeedbackCalificacionResponseDTO();
         dto.setId(f.getId());

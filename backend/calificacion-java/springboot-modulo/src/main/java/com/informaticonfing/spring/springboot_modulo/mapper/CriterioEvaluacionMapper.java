@@ -5,9 +5,15 @@ import com.informaticonfing.spring.springboot_modulo.dto.CriterioEvaluacionRespo
 import com.informaticonfing.spring.springboot_modulo.model.CriterioEvaluacion;
 
 public class CriterioEvaluacionMapper {
+
     public static CriterioEvaluacion toEntity(CriterioEvaluacionRequestDTO dto) {
-        return new CriterioEvaluacion(null, dto.getNombre(), dto.getDescripcion(), dto.getPeso());
+        CriterioEvaluacion c = new CriterioEvaluacion();
+        c.setNombre(dto.getNombre());
+        c.setDescripcion(dto.getDescripcion());
+        c.setPeso(dto.getPeso());
+        return c;
     }
+
     public static CriterioEvaluacionResponseDTO toDTO(CriterioEvaluacion c) {
         CriterioEvaluacionResponseDTO dto = new CriterioEvaluacionResponseDTO();
         dto.setId(c.getId());

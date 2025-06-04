@@ -6,6 +6,7 @@ import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
 
 public class CalificacionMapper {
 
+    // Convierte un DTO de petición a entidad
     public static Calificacion toEntity(CalificacionRequestDTO dto, ParametrosIdeales parametrosIdeales) {
         Calificacion c = new Calificacion();
         c.setGrabacionId(dto.getGrabacionId());
@@ -17,6 +18,7 @@ public class CalificacionMapper {
         return c;
     }
 
+    // Convierte una entidad a DTO de respuesta
     public static CalificacionResponseDTO toDTO(Calificacion c) {
         CalificacionResponseDTO dto = new CalificacionResponseDTO();
         dto.setId(c.getId());

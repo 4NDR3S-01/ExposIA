@@ -8,6 +8,7 @@ public class CalificacionRequestDTO {
     private String tipoCalificacion;
     private Long parametrosIdealesId;
 
+    // Getters y Setters
     public Long getGrabacionId() { return grabacionId; }
     public void setGrabacionId(Long grabacionId) { this.grabacionId = grabacionId; }
 

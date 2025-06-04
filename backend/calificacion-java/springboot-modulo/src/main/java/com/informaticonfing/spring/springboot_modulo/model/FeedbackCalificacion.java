@@ -3,9 +3,6 @@ package com.informaticonfing.spring.springboot_modulo.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Entidad para la retroalimentación asociada a una calificación.
- */
 @Entity
 @Table(name = "feedback_calificacion")
 public class FeedbackCalificacion {
@@ -14,15 +11,12 @@ public class FeedbackCalificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Pertenece a una calificación
     @ManyToOne
     @JoinColumn(name = "calificacion_id")
     private Calificacion calificacion;
 
     private String observacion;
-
     private LocalDateTime fecha;
-
     private String autor;
 
     public FeedbackCalificacion() {}
@@ -35,7 +29,6 @@ public class FeedbackCalificacion {
         this.autor = autor;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

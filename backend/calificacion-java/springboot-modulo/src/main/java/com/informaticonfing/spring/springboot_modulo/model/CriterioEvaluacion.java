@@ -2,9 +2,6 @@ package com.informaticonfing.spring.springboot_modulo.model;
 
 import jakarta.persistence.*;
 
-/**
- * Entidad que representa los criterios de evaluación.
- */
 @Entity
 @Table(name = "criterios_evaluacion")
 public class CriterioEvaluacion {
@@ -14,9 +11,7 @@ public class CriterioEvaluacion {
     private Long id;
 
     private String nombre;
-
     private String descripcion;
-
     private Double peso;
 
     public CriterioEvaluacion() {}
@@ -28,7 +23,6 @@ public class CriterioEvaluacion {
         this.peso = peso;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

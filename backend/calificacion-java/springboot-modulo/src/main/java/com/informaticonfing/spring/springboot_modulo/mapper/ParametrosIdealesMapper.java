@@ -5,6 +5,7 @@ import com.informaticonfing.spring.springboot_modulo.dto.ParametrosIdealesRespon
 import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
 
 public class ParametrosIdealesMapper {
+
     public static ParametrosIdeales toEntity(ParametrosIdealesRequestDTO dto) {
         ParametrosIdeales p = new ParametrosIdeales();
         p.setClaridadIdeal(dto.getClaridadIdeal());
@@ -13,6 +14,7 @@ public class ParametrosIdealesMapper {
         p.setOtrosParametros(dto.getOtrosParametros());
         return p;
     }
+
     public static ParametrosIdealesResponseDTO toDTO(ParametrosIdeales p) {
         ParametrosIdealesResponseDTO dto = new ParametrosIdealesResponseDTO();
         dto.setId(p.getId());

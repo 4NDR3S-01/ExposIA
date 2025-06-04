@@ -2,9 +2,6 @@ package com.informaticonfing.spring.springboot_modulo.model;
 
 import jakarta.persistence.*;
 
-/**
- * Entidad para los parámetros ideales usados como referencia en la evaluación.
- */
 @Entity
 @Table(name = "parametros_ideales")
 public class ParametrosIdeales {
@@ -23,7 +20,7 @@ public class ParametrosIdeales {
     private Double pausasIdeales;
 
     @Column(name = "otros_parametros", columnDefinition = "TEXT")
-    private String otrosParametros; // Puede almacenar un JSON como texto
+    private String otrosParametros;
 
     public ParametrosIdeales() {}
 
@@ -35,7 +32,6 @@ public class ParametrosIdeales {
         this.otrosParametros = otrosParametros;
     }
 
-    // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
