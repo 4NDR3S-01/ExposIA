@@ -24,8 +24,11 @@ RUN chown -R www-data:www-data /var/www/html \
 # Habilita mod_rewrite
 RUN a2enmod rewrite
 
+# Cambia el DocumentRoot de Apache a /public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' /etc/apache2/sites-available/000-default.conf
+
 # Expone el puerto
 EXPOSE 80
 
-# Comando para iniciar Laravel
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+# Usa Apache como servidor
+CMD ["apache2-foreground"]
