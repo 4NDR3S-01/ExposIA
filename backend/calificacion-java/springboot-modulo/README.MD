@@ -24,7 +24,7 @@ El proyecto utiliza **Maven** como gestor de dependencias. No necesitas instalar
 ./mvnw clean install
 ```
 
-o si tienes Maven instalado globalmente:
+O si tienes Maven instalado globalmente:
 
 ```bash
 mvn clean install
@@ -40,7 +40,7 @@ Edita el archivo `application.properties` con tus credenciales de base de datos 
 ./mvnw spring-boot:run
 ```
 
-o, si tienes Maven instalado globalmente:
+O, si tienes Maven instalado globalmente:
 
 ```bash
 mvn spring-boot:run
@@ -56,23 +56,27 @@ El backend estará disponible en [http://localhost:8080](http://localhost:8080).
 /springboot-modulo
 │
 ├── src/
-│   ├── controller/       # Controladores REST
-│   ├── service/          # Lógica de negocio
-│   ├── repository/       # Interfaces JPA para acceso a datos
-│   ├── model/            # Entidades JPA
-│   ├── dto/              # Objetos de transferencia de datos
-│   ├── mapper/           # Conversores entidad-DTO
-│   ├── config/           # Configuración (seguridad, etc.)
+│   ├── controller/         # Controladores REST
+│   ├── service/            # Lógica de negocio
+│   ├── repository/         # Interfaces JPA para acceso a datos
+│   ├── model/              # Entidades JPA
+│   ├── dto/                # Objetos de transferencia de datos
+│   ├── mapper/             # Conversores entidad-DTO
+│   ├── config/             # Configuración (seguridad, etc.)
 │
-├── screenshots/          # Evidencias de pruebas (Postman)
+├── screenshots/            # Evidencias de pruebas (Postman)
 │   ├── calificacion_delete.png
 │   ├── calificacion_get_delete.png
 │   ├── calificacion_getbyid.png
 │   ├── calificacion_post.png
 │   ├── calificacion_put.png
 │   ├── calificaciones_get.png
+│   ├── get_criterios.png
+│   ├── get_detalles.png
+│   ├── get_parametros_ideales.png
+│   ├── getfeedback.png
 │   ├── post_supabase.png
-│   ├── revision_post.png
+│   └── revision_post.png
 │
 ├── README.md
 └── application.properties
@@ -110,61 +114,77 @@ El módulo está protegido con **Spring Security**.
 
 ## 🌐 Endpoints REST
 
-| Entidad              | Método | Endpoint                   | Descripción                          |
-| -------------------- | ------ | -------------------------- | ------------------------------------ |
-| Calificacion         | GET    | `/api/calificaciones`      | Lista todas las calificaciones       |
-|                      | GET    | `/api/calificaciones/{id}` | Consulta una calificación por ID     |
-|                      | POST   | `/api/calificaciones`      | Crea una nueva calificación          |
-|                      | PUT    | `/api/calificaciones/{id}` | Actualiza una calificación existente |
-|                      | DELETE | `/api/calificaciones/{id}` | Elimina una calificación             |
-| CriterioEvaluacion   | ...    | `/api/criterios`           | CRUD completo de criterios           |
-| DetalleCalificacion  | ...    | `/api/detalles`            | CRUD completo de detalles            |
-| FeedbackCalificacion | ...    | `/api/feedback`            | CRUD completo de feedbacks           |
-| ParametrosIdeales    | ...    | `/api/parametros-ideales`  | CRUD de parámetros ideales           |
+### Calificaciones
+
+* **GET** `/api/calificaciones` – Listar todas
+* **GET** `/api/calificaciones/{id}` – Buscar por ID
+* **POST** `/api/calificaciones` – Crear
+* **PUT** `/api/calificaciones/{id}` – Actualizar
+* **DELETE** `/api/calificaciones/{id}` – Eliminar
+
+### Criterios de Evaluación
+
+* **GET** `/api/criterios` – Listar todos
+
+### Detalles de Calificación
+
+* **GET** `/api/detalles` – Listar todos
+
+### Feedback
+
+* **GET** `/api/feedback` – Listar todos
+
+### Parámetros Ideales
+
+* **GET** `/api/parametros-ideales` – Listar todos
 
 > **Nota:** Excepto `/api/parametros-ideales`, todos los endpoints requieren autenticación Basic Auth.
 
+---
 
 ## 🧪 Evidencias de Pruebas (Postman)
 
-A continuación, algunas capturas de las pruebas realizadas sobre los endpoints principales:
+En la carpeta `/screenshots` se incluyen capturas reales de todas las pruebas realizadas en Postman para cada entidad y operación principal del CRUD:
 
-### Obtener todas las calificaciones (GET)
+* **GET** de todas las calificaciones
+  ![GET Calificaciones](screenshots/calificaciones_get.png)
 
-![GET Calificaciones](screenshots/calificaciones_get.png)
+* **GET** de calificación por ID
+  ![GET Calificación por ID](screenshots/calificacion_getbyid.png)
 
+* **POST** crear nueva calificación
+  ![POST Calificación](screenshots/calificacion_post.png)
 
-### Crear nueva calificación (POST)
+* **PUT** editar calificación existente
+  ![PUT Calificación](screenshots/calificacion_put.png)
 
-![POST Calificación](screenshots/calificacion_post.png)
+* **DELETE** calificación
+  ![DELETE Calificación](screenshots/calificacion_delete.png)
 
-### Obtener calificación por ID (GET)
+* **GET** tras eliminar (comprobar que se borró)
+  ![GET tras DELETE](screenshots/calificacion_get_delete.png)
 
-![GET Calificación por ID](screenshots/calificacion_getbyid.png)
+* **GET** todos los criterios de evaluación
+  ![GET Criterios](screenshots/get_criterios.png)
 
+* **GET** todos los detalles de calificación
+  ![GET Detalles](screenshots/get_detalles.png)
 
-### Editar calificación existente (PUT)
+* **GET** todos los parámetros ideales
+  ![GET Parámetros Ideales](screenshots/get_parametros_ideales.png)
 
-![PUT Calificación](screenshots/calificacion_put.png)
+* **GET** feedbacks
+  ![GET Feedback](screenshots/getfeedback.png)
 
-### Eliminar calificación (DELETE)
-
-![DELETE Calificación](screenshots/calificacion_delete.png)
-
-### Verificar calificación eliminada (GET tras DELETE)
-
-![GET tras DELETE](screenshots/calificacion_get_delete.png)
-
-### Otras pruebas de integración Supabase
-
-![POST Supabase](screenshots/post_supabase.png)
-![Revisión POST](screenshots/revision_post.png)
+* **POST** Supabase y revisión
+  ![POST Supabase](screenshots/post_supabase.png)
+  ![Revisión POST](screenshots/revision_post.png)
 
 ---
 
-## ⚙️ Recomendaciones
+## ⚙️ Recomendaciones y Notas
 
-* Asegúrate de que los registros relacionados existan en la base antes de hacer POST o PUT (usuarios, grabaciones, etc.).
+* Asegúrate de que los registros relacionados (usuarios, grabaciones, parámetros ideales, etc.) existan en la base antes de hacer POST o PUT.
 * Las evidencias aquí mostradas son de rutas realmente probadas con Postman.
 * Puedes ampliar este módulo agregando más lógica de negocio o integraciones según las necesidades del proyecto.
-
+* La integración de IA corresponde a otro módulo del grupo; este módulo se enfoca exclusivamente en la lógica de calificación.
