@@ -3,6 +3,7 @@ package com.informaticonfing.spring.springboot_modulo.controller;
 import com.informaticonfing.spring.springboot_modulo.dto.CalificacionRequestDTO;
 import com.informaticonfing.spring.springboot_modulo.dto.CalificacionResponseDTO;
 import com.informaticonfing.spring.springboot_modulo.service.CalificacionService;
+import com.informaticonfing.spring.springboot_modulo.dto.AiCalificacionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +76,15 @@ public class CalificacionController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Aplica calificaciones generadas por IA y actualiza la calificación existente.
+     * @param dto datos provenientes de la IA
+     * @return la calificación actualizada con el puntaje final
+     */
+    @PostMapping("/ai")
+    public CalificacionResponseDTO aplicarIA(@RequestBody AiCalificacionDTO dto) {
+        return service.aplicarCalificacionAI(dto);
     }
 }

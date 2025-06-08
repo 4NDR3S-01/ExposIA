@@ -1,0 +1,16 @@
+{
+  "calificacionId": 1,
+  "puntajeGlobalAi": 7.0,
+  "observacionGlobalAi": "Buena exposición",
+  "detalles": [
+    {
+      "criterioId": 5,
+      "puntaje": 6,
+      "slideId": 1,
+      "comentario": "Buen ritmo"
+    }
+  ],
+  "feedbacks": [
+    { "observacion": "Sigue practicando", "autor": "IA" }
+  ]
+}

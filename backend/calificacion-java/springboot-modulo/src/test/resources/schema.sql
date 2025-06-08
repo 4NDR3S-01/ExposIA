@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS detalle_calificacion (
   id BIGINT PRIMARY KEY,
   calificacion_id BIGINT,
   criterio_id BIGINT,
-  slide_ide INTEGER,
+  slide_id INTEGER,
   puntaje DOUBLE PRECISION,
   comentario VARCHAR(255),
   fragmento_audio_id BIGINT,

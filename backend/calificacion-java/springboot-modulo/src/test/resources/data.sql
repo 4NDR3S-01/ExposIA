@@ -34,7 +34,7 @@ INSERT INTO criterios_evaluacion (id, nombre, descripcion, peso) VALUES
   (2, 'Dominio', 'Dominio del tema', 0.6);
 
 -- Detalle calificación de prueba
-INSERT INTO detalle_calificacion (id, calificacion_id, criterio_id, slide_ide, puntaje, comentario, fragmento_audio_id) VALUES
+INSERT INTO detalle_calificacion (id, calificacion_id, criterio_id, slide_id, puntaje, comentario, fragmento_audio_id) VALUES
   (1, 1, 1, 1, 9.0, 'Muy claro', 101),
   (2, 1, 2, 2, 10.0, 'Dominio total', 102),
   (3, 2, 1, 1, 7.0, 'Falta claridad', 201),

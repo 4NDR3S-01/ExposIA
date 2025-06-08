@@ -32,7 +32,17 @@ mvn clean install
 
 ### 3. Configurar la base de datos
 
-Edita el archivo `application.properties` con tus credenciales de base de datos PostgreSQL (ya viene listo para Supabase, pero revisa que el usuario, password y url sean correctos).
+Crea un archivo `.env` en la raíz del módulo con las variables necesarias para conectarte a tu instancia de PostgreSQL:
+
+```env
+DB_HOST=aws-0-us-east-2.pooler.supabase.com
+DB_PORT=6543
+DB_NAME=postgres
+DB_USERNAME=postgres.xuotujfajsosnsjvtxyh
+DB_PASSWORD=<tu_contraseña>
+```
+
+Luego ejecuta `source .env` (o define estas variables manualmente) antes de iniciar la aplicación. `application.properties` utiliza estas variables automáticamente.
 
 ### 4. Levantar el proyecto
 
@@ -121,6 +131,7 @@ El módulo está protegido con **Spring Security**.
 * **POST** `/api/calificaciones` – Crear
 * **PUT** `/api/calificaciones/{id}` – Actualizar
 * **DELETE** `/api/calificaciones/{id}` – Eliminar
+* **POST** `/api/calificaciones/ai` – Aplicar calificación con IA
 
 ### Criterios de Evaluación
 
@@ -180,11 +191,89 @@ En la carpeta `/screenshots` se incluyen capturas reales de todas las pruebas re
   ![POST Supabase](screenshots/post_supabase.png)
   ![Revisión POST](screenshots/revision_post.png)
 
----
+
+## ☁️ **Despliegue en Render**
+
+El módulo fue desplegado correctamente en el hosting gratuito **[Render](https://render.com/)**, lo que permite consumir la API REST desde cualquier parte del mundo.
+
+* **URL pública del backend:**
+  [`https://deploy-modulo.onrender.com`](https://deploy-modulo.onrender.com)
+
+### Endpoints accesibles en producción
+
+Puedes consumir los endpoints principales desde internet (puedes probarlos con Postman o navegador):
+
+* [`/api/criterios`](https://deploy-modulo.onrender.com/api/criterios)
+* [`/api/calificaciones`](https://deploy-modulo.onrender.com/api/calificaciones)
+
+### Evidencias del despliegue
+
+* **Comprobación del despliegue en Render**
+  ![Comprobación despliegue Render](screenshots/comprobaciondespliegueenrender.png)
+
+* **Consumo del endpoint `/api/calificaciones` en producción**
+  ![API Calificaciones Render](screenshots/renderapicalificaciones.png)
+
+* **Consumo del endpoint `/api/criterios` en producción**
+  ![API Criterios Render](screenshots/renderapicriterio.png)
 
 ## ⚙️ Recomendaciones y Notas
 
 * Asegúrate de que los registros relacionados (usuarios, grabaciones, parámetros ideales, etc.) existan en la base antes de hacer POST o PUT.
 * Las evidencias aquí mostradas son de rutas realmente probadas con Postman.
 * Puedes ampliar este módulo agregando más lógica de negocio o integraciones según las necesidades del proyecto.
-* La integración de IA corresponde a otro módulo del grupo; este módulo se enfoca exclusivamente en la lógica de calificación.
+* Ahora el módulo puede combinar calificaciones generadas por IA usando el nuevo método `aplicarCalificacionAI` en `CalificacionService`.
+
+## 🤖 Calificaciones asistidas por IA
+
+Envía la solicitud al endpoint `/api/calificaciones/ai` con un JSON como el siguiente:
+
+```json
+{
+  "calificacionId": 1,
+  "puntajeGlobalAi": 7.0,
+  "detalles": [
+    {
+      "criterioId": 5,
+      "puntaje": 6,
+      "slideId": 1,
+      "comentario": "Buen ritmo"
+    }
+  ]
+}
+```
+
+Cada detalle se promedia con el puntaje manual y se actualiza el `puntajeGlobal` final.
+
+Ejemplo de respuesta luego de aplicar la calificación de la IA:
+
+```json
+{
+  "id": 1,
+  "grabacionId": 1,
+  "usuarioId": 1,
+  "puntajeGlobal": 7.5,
+  "observacionGlobal": "Buena exposición",
+  "tipoCalificacion": "manual",
+  "parametrosIdealesId": null,
+  "detalles": [
+    {
+      "id": 1,
+      "calificacionId": 1,
+      "criterioId": 5,
+      "slideId": 1,
+      "puntaje": 7,
+      "comentario": "Comentario del detalle",
+      "fragmentoAudioId": null
+    }
+  ]
+
+
+}
+
+
+Puedes encontrar estos ejemplos en los archivos
+`examples/ai_ejemplo_peticion.json` y
+`examples/ai_ejemplo_respuesta.json` para utilizarlos directamente con
+Postman u otra herramienta de prueba.
+```

@@ -2,12 +2,22 @@ package com.informaticonfing.spring.springboot_modulo.service;
 
 import com.informaticonfing.spring.springboot_modulo.dto.CalificacionRequestDTO;
 import com.informaticonfing.spring.springboot_modulo.dto.CalificacionResponseDTO;
+import com.informaticonfing.spring.springboot_modulo.dto.AiCalificacionDTO;
+import com.informaticonfing.spring.springboot_modulo.dto.AiDetalleDTO;
+import com.informaticonfing.spring.springboot_modulo.dto.AiFeedbackDTO;
+
 import com.informaticonfing.spring.springboot_modulo.mapper.CalificacionMapper;
 import com.informaticonfing.spring.springboot_modulo.model.Calificacion;
+import com.informaticonfing.spring.springboot_modulo.model.FeedbackCalificacion;
 import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
+import com.informaticonfing.spring.springboot_modulo.model.DetalleCalificacion;
 import com.informaticonfing.spring.springboot_modulo.repository.CalificacionRepository;
 import com.informaticonfing.spring.springboot_modulo.repository.ParametrosIdealesRepository;
+import com.informaticonfing.spring.springboot_modulo.repository.DetalleCalificacionRepository;
+import com.informaticonfing.spring.springboot_modulo.repository.FeedbackCalificacionRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +30,19 @@ import java.util.stream.Collectors;
 public class CalificacionService {
     private final CalificacionRepository repository;
     private final ParametrosIdealesRepository parametrosRepo;
+    private final DetalleCalificacionRepository detalleRepo;
+    private final FeedbackCalificacionRepository feedbackRepo;
 
-    public CalificacionService(CalificacionRepository repository, ParametrosIdealesRepository parametrosRepo) {
+    public CalificacionService(
+            CalificacionRepository repository,
+            ParametrosIdealesRepository parametrosRepo,
+            DetalleCalificacionRepository detalleRepo,
+            FeedbackCalificacionRepository feedbackRepo
+    ) {
         this.repository = repository;
         this.parametrosRepo = parametrosRepo;
+        this.detalleRepo = detalleRepo;
+        this.feedbackRepo = feedbackRepo;
     }
 
     /**
@@ -85,5 +104,57 @@ public class CalificacionService {
      */
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    /**
+     * Procesa las calificaciones generadas por IA y actualiza la calificación manual.
+     * Combina los puntajes manuales con los de la IA calculando un promedio.
+     * @param dto datos provenientes de la IA
+     * @return CalificacionResponseDTO actualizado con el puntaje final
+     */
+    public CalificacionResponseDTO aplicarCalificacionAI(AiCalificacionDTO dto) {
+        Calificacion calificacion = repository.findById(dto.getCalificacionId())
+                .orElseThrow(() -> new IllegalArgumentException("Calificación no encontrada"));
+
+        // Actualizar detalles promediando con los valores de IA
+        List<DetalleCalificacion> detalles = detalleRepo.findByCalificacionId(calificacion.getId());
+        for (AiDetalleDTO aiDetalle : dto.getDetalles()) {
+            detalles.stream()
+                    .filter(d -> d.getCriterioEvaluacion() != null &&
+                            d.getCriterioEvaluacion().getId().equals(aiDetalle.getCriterioId()))
+                    .findFirst()
+                    .ifPresent(d -> {
+                        double promedio = (d.getPuntaje() + aiDetalle.getPuntaje()) / 2.0;
+                        d.setPuntaje((int) Math.round(promedio));
+                        if (aiDetalle.getComentario() != null) {
+                            d.setComentario(aiDetalle.getComentario());
+                        }
+                        detalleRepo.save(d);
+                    });
+        }
+
+        double finalGlobal = (calificacion.getPuntajeGlobal() + dto.getPuntajeGlobalAi()) / 2.0;
+        calificacion.setPuntajeGlobal(finalGlobal);
+        if (dto.getObservacionGlobalAi() != null) {
+            calificacion.setObservacionGlobal(dto.getObservacionGlobalAi());
+        }
+        Calificacion saved = repository.save(calificacion);
+
+        if (dto.getFeedbacks() != null) {
+            for (AiFeedbackDTO fb : dto.getFeedbacks()) {
+                FeedbackCalificacion entidad = new FeedbackCalificacion();
+                entidad.setCalificacion(saved);
+                entidad.setObservacion(fb.getObservacion());
+                entidad.setAutor(fb.getAutor());
+                entidad.setFecha(LocalDateTime.now());
+                feedbackRepo.save(entidad);
+            }
+        }
+
+
+        // Obtener los detalles actualizados para incluirlos en la respuesta
+        List<DetalleCalificacion> detallesActualizados = detalleRepo.findByCalificacionId(saved.getId());
+
+        return CalificacionMapper.toDTO(saved, detallesActualizados);
     }
 }

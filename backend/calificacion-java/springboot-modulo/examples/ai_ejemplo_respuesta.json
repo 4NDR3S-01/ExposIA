@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "grabacionId": 1,
+  "usuarioId": 1,
+  "puntajeGlobal": 7.5,
+  "observacionGlobal": "Buena exposición",
+  "tipoCalificacion": "manual",
+  "parametrosIdealesId": null,
+  "detalles": [
+    {
+      "id": 1,
+      "calificacionId": 1,
+      "criterioId": 5,
+      "slideId": 1,
+      "puntaje": 7,
+      "comentario": "Comentario del detalle",
+      "fragmentoAudioId": null
+    }
+  ]
+}

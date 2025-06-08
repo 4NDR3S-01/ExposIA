@@ -8,6 +8,7 @@ public class CalificacionResponseDTO {
     private String observacionGlobal;
     private String tipoCalificacion;
     private Long parametrosIdealesId;
+    private java.util.List<DetalleCalificacionResponseDTO> detalles;
 
     // Getters y Setters
     public Long getId() { return id; }
@@ -30,4 +31,7 @@ public class CalificacionResponseDTO {
 
     public Long getParametrosIdealesId() { return parametrosIdealesId; }
     public void setParametrosIdealesId(Long parametrosIdealesId) { this.parametrosIdealesId = parametrosIdealesId; }
+
+    public java.util.List<DetalleCalificacionResponseDTO> getDetalles() { return detalles; }
+    public void setDetalles(java.util.List<DetalleCalificacionResponseDTO> detalles) { this.detalles = detalles; }
 }

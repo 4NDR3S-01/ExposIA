@@ -3,6 +3,7 @@ package com.informaticonfing.spring.springboot_modulo.mapper;
 import com.informaticonfing.spring.springboot_modulo.dto.*;
 import com.informaticonfing.spring.springboot_modulo.model.Calificacion;
 import com.informaticonfing.spring.springboot_modulo.model.ParametrosIdeales;
+import com.informaticonfing.spring.springboot_modulo.model.DetalleCalificacion;
 
 public class CalificacionMapper {
 
@@ -20,6 +21,11 @@ public class CalificacionMapper {
 
     // Convierte una entidad a DTO de respuesta
     public static CalificacionResponseDTO toDTO(Calificacion c) {
+        return toDTO(c, null);
+    }
+
+    // Convierte una entidad y su lista de detalles a DTO de respuesta
+    public static CalificacionResponseDTO toDTO(Calificacion c, java.util.List<DetalleCalificacion> detalles) {
         CalificacionResponseDTO dto = new CalificacionResponseDTO();
         dto.setId(c.getId());
         dto.setGrabacionId(c.getGrabacionId());
@@ -29,6 +35,12 @@ public class CalificacionMapper {
         dto.setTipoCalificacion(c.getTipoCalificacion());
         if (c.getParametrosIdeales() != null) {
             dto.setParametrosIdealesId(c.getParametrosIdeales().getId());
+        }
+        if (detalles != null) {
+            java.util.List<DetalleCalificacionResponseDTO> detalleDtos = detalles.stream()
+                .map(DetalleCalificacionMapper::toDTO)
+                .toList();
+            dto.setDetalles(detalleDtos);
         }
         return dto;
     }
