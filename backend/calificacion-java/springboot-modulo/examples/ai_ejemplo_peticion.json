@@ -1,16 +1,29 @@
 {
   "calificacionId": 1,
   "puntajeGlobalAi": 7.0,
-  "observacionGlobalAi": "Buena exposición",
+  "observacionGlobalAi": "Buena exposición, con un ritmo dinámico",
   "detalles": [
     {
       "criterioId": 5,
       "puntaje": 6,
       "slideId": 1,
-      "comentario": "Buen ritmo"
+      "comentario": "Buen ritmo al comenzar, podría haber pausas en conceptos clave"
+    },
+    {
+      "criterioId": 7,
+      "puntaje": 8,
+      "slideId": 2,
+      "comentario": "Uso efectivo de ejemplos"
+    },
+    {
+      "criterioId": 10,
+      "puntaje": 5,
+      "slideId": 3,
+      "comentario": "Texto demasiado denso en este slide"
     }
   ],
   "feedbacks": [
-    { "observacion": "Sigue practicando", "autor": "IA" }
+    { "observacion": "Sigue practicando", "autor": "IA" },
+    { "observacion": "Buen uso del contacto visual", "autor": "IA" }
   ]
 }
