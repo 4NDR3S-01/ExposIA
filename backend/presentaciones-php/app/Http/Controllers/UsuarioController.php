@@ -9,15 +9,26 @@ use Illuminate\Support\Facades\Hash;
 class UsuarioController extends Controller
 {
     /**
-     * Muestra una lista de todos los usuarios con sus relaciones.
+     * Listar todos los usuarios
      */
     public function index()
     {
-        return Usuario::with(['presentaciones', 'calificaciones'])->get();
+        try {
+            $usuarios = Usuario::all();
+            return response()->json([
+                'success' => true,
+                'data' => $usuarios
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al obtener usuarios: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Almacena un nuevo usuario en la base de datos.
+     * Crear nuevo usuario
      */
     public function store(Request $request)
     {
@@ -27,49 +38,40 @@ class UsuarioController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        // Encriptar la contraseña
         $data['password'] = Hash::make($data['password']);
-
         $usuario = Usuario::create($data);
-        return response()->json($usuario, 201);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $usuario
+        ], 201);
     }
 
     /**
      * Muestra un usuario específico con sus relaciones.
      */
-    public function show(Usuario $usuario)
+    public function show($id)
     {
-        return $usuario->load(['presentaciones', 'calificaciones']);
+        $usuario = Usuario::findOrFail($id);
+        return response()->json(['success' => true, 'data' => $usuario]);
     }
 
     /**
      * Actualiza un usuario existente.
      */
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request, $id)
     {
-        $data = $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:usuarios,email,' . $usuario->id,
-            'password' => 'nullable|string|min:6',
-        ]);
-
-        // Encriptar el password solo si se envió uno nuevo
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        $usuario->update($data);
-        return response()->json($usuario);
+        $usuario = Usuario::findOrFail($id);
+        $usuario->update($request->all());
+        return response()->json(['success' => true, 'data' => $usuario]);
     }
 
     /**
      * Elimina un usuario.
      */
-    public function destroy(Usuario $usuario)
+    public function destroy($id)
     {
-        $usuario->delete();
-        return response()->json(['message' => 'Usuario eliminado']);
+        Usuario::destroy($id);
+        return response()->json(['success' => true, 'message' => 'Usuario eliminado']);
     }
 }
