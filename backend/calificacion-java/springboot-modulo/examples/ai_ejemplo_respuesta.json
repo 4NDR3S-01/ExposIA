@@ -1,0 +1,38 @@
+{
+  "id": 1,
+  "grabacionId": 1,
+  "usuarioId": 1,
+  "puntajeGlobal": 7.5,
+  "observacionGlobal": "Buena exposición, especialmente en la interacción con la audiencia",
+  "tipoCalificacion": "manual",
+  "parametrosIdealesId": null,
+  "detalles": [
+    {
+      "id": 1,
+      "calificacionId": 1,
+      "criterioId": 5,
+      "slideId": 1,
+      "puntaje": 7,
+      "comentario": "Ritmo controlado, buen balance entre velocidad y pausas",
+      "fragmentoAudioId": null
+    },
+    {
+      "id": 2,
+      "calificacionId": 1,
+      "criterioId": 7,
+      "slideId": 2,
+      "puntaje": 8,
+      "comentario": "Ejemplos claros y bien explicados",
+      "fragmentoAudioId": null
+    },
+    {
+      "id": 3,
+      "calificacionId": 1,
+      "criterioId": 10,
+      "slideId": 3,
+      "puntaje": 6,
+      "comentario": "Texto algo denso, tal vez resumir puntos clave",
+      "fragmentoAudioId": null
+    }
+  ]
+}
