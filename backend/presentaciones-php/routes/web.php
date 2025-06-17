@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PresentacionController;
 use App\Http\Controllers\UsuarioController;
 
-// Ruta principal - página de bienvenida
+// Página principal
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Rutas para mostrar formularios de registro y login (vistas Blade)
+// Formularios de registro y login (Blade)
 Route::get('/registro', function() {
     return view('auth.register');
 })->name('registro');
@@ -18,10 +18,10 @@ Route::get('/login', function() {
     return view('auth.login');
 })->name('login');
 
-// Rutas para manejar presentaciones (CRUD web, no API)
-Route::resource('presentaciones', PresentacionController::class, [
-    'parameters' => ['presentaciones' => 'presentacion']
-]);
+// CRUD de presentaciones usando vistas Blade/web
+Route::resource('presentaciones', PresentacionController::class,
+    ['parameters' => ['presentaciones' => 'presentacion']]
+);
 
-// Ruta para registrar usuarios mediante formulario web (POST)
+// Registro de usuarios por formulario web (POST)
 Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');

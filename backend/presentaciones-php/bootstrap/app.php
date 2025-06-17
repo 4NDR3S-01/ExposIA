@@ -13,8 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'jwt.auth' => \App\Http\Middleware\JWTMiddleware::class,
-            'jwt.debug' => \App\Http\Middleware\DebugJWTMiddleware::class, // Nuevo middleware
+            'jwt' => \App\Http\Middleware\JWTMiddleware::class,              // Alias 'jwt' para rutas protegidas
+            'jwt.debug' => \App\Http\Middleware\DebugJWTMiddleware::class,   // Otro middleware, si lo usas
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

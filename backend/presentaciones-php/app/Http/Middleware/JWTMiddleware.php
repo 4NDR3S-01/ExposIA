@@ -11,34 +11,23 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class JWTMiddleware
 {
+    /**
+     * Handle an incoming request.
+     */
     public function handle(Request $request, Closure $next)
     {
         try {
-            // Obtener el token
-            $token = $request->bearerToken();
-            
-            if (!$token) {
-                return response()->json(['error' => 'Token no proporcionado'], 401);
-            }
-
-            // Establecer el token en JWT
-            JWTAuth::setToken($token);
-            
-            // Intentar obtener el usuario
-            $user = JWTAuth::authenticate();
-            
-            if (!$user) {
-                return response()->json(['error' => 'Usuario no encontrado'], 401);
-            }
-
+            // Intenta autenticar el usuario con el token JWT
+            $user = JWTAuth::parseToken()->authenticate();
         } catch (TokenExpiredException $e) {
-            return response()->json(['error' => 'Token expirado'], 401);
+            return response()->json(['success' => false, 'message' => 'Token expirado'], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json(['error' => 'Token inválido'], 401);
+            return response()->json(['success' => false, 'message' => 'Token inválido'], 401);
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Error procesando token: ' . $e->getMessage()], 401);
+            return response()->json(['success' => false, 'message' => 'Token no encontrado o inválido'], 401);
         }
 
+        // Si pasa la autenticación, continúa la petición
         return $next($request);
     }
 }

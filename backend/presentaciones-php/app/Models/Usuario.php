@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Usuario extends Authenticatable implements JWTSubject
 {
+    use HasFactory;
+    
     protected $table = 'usuarios'; // Nombre real de la tabla en tu BD
     protected $fillable = ['nombre', 'email', 'password'];     // Campos que se pueden asignar masivamente
     protected $hidden = ['password'];

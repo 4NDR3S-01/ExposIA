@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 
 class Presentacion extends Model
 {
+    use HasFactory;
+    
     protected $table = 'presentaciones';     // Nombre de la tabla en la base de datos
     protected $fillable = ['titulo', 'id_usuario', 'id_tema', 'archivo_pdf'];     // Los campos que pueden ser asignados masivamente
 

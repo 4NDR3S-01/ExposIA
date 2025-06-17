@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Calificacion extends Model
 {
+    use HasFactory;
+    
     protected $table = 'calificaciones';     // Nombre de la tabla en la base de datos
     protected $fillable = ['puntaje', 'comentario','id_usuario', 'id_presentacion'];     // Campos que se pueden asignar masivamente
 

@@ -1,37 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
-
 
 class UsuarioController extends Controller
 {
-    /**
-     * Listar todos los usuarios
-     */
+    // Listar todos los usuarios
     public function index()
     {
-        try {
-            $usuarios = Usuario::all();
-            return response()->json([
-                'success' => true,
-                'data' => $usuarios
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Error al obtener usuarios: ' . $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'data' => Usuario::with(['presentaciones', 'calificaciones'])->get()
+        ]);
     }
 
-    /**
-     * Crear nuevo usuario
-     */
+    // Crear un nuevo usuario
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -43,41 +30,46 @@ class UsuarioController extends Controller
         $data['password'] = Hash::make($data['password']);
         $usuario = Usuario::create($data);
 
-        // Generar token JWT automáticamente para el usuario registrado
-        $token = auth()->login($usuario);
-        
         return response()->json([
             'success' => true,
-            'data' => $usuario,
-            'token' => $token
+            'data' => $usuario
         ], 201);
     }
 
-    /**
-     * Muestra un usuario específico con sus relaciones.
-     */
+    // Mostrar un usuario específico
     public function show($id)
     {
-        $usuario = Usuario::findOrFail($id);
+        $usuario = Usuario::with(['presentaciones', 'calificaciones'])->findOrFail($id);
         return response()->json(['success' => true, 'data' => $usuario]);
     }
 
-    /**
-     * Actualiza un usuario existente.
-     */
+    // Actualizar usuario
     public function update(Request $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
-        $usuario->update($request->all());
+
+        $data = $request->validate([
+            'nombre' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:usuarios,email,' . $id,
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $usuario->update($data);
+
         return response()->json(['success' => true, 'data' => $usuario]);
     }
 
-    /**
-     * Elimina un usuario.
-     */
+    // Eliminar usuario
     public function destroy($id)
     {
-        Usuario::destroy($id);
+        $usuario = Usuario::findOrFail($id);
+        $usuario->delete();
         return response()->json(['success' => true, 'message' => 'Usuario eliminado']);
     }
 }

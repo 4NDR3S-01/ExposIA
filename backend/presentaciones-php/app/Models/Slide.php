@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Slide extends Model
 {
+    use HasFactory;
+    
     protected $table = 'slides';     // Nombre de la tabla en la base de datos
     protected $fillable = ['numero_slide', 'imagen_slide', 'texto_slide', 'id_presentacion'];     // Campos que se pueden asignar masivamente
 

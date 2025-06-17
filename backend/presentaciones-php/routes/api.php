@@ -1,24 +1,16 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\PresentacionController;
-use App\Http\Controllers\SlideController;
-use App\Http\Controllers\ComentarioController;
-use App\Http\Controllers\ReaccionController;
+use App\Http\Controllers\API\UsuarioController;
+use App\Http\Controllers\API\PresentacionController;
+use App\Http\Controllers\API\SlideController;
+use App\Http\Controllers\API\ComentarioController;
+use App\Http\Controllers\API\ReaccionController;
+use App\Http\Controllers\API\TemaController;
+use App\Http\Controllers\API\CalificacionController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Aquí se registran las rutas de tu API, protegidas o públicas.
-|
-*/
-
-// Ruta de prueba pública
+// Ruta pública para probar que la API funciona sin autenticación
 Route::get('/test', function () {
     return response()->json(['mensaje' => 'API funcionando sin auth']);
 });
@@ -29,30 +21,36 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 });
 
-// Rutas protegidas con JWT
-Route::middleware(['auth:api'])->group(function () {
+// Registro público directo como usuario
+Route::post('/usuarios', [UsuarioController::class, 'store']);
 
-    // Ruta de prueba autenticada
+// Rutas protegidas por JWT
+Route::middleware(['jwt'])->group(function () {
+
     Route::get('/test-auth', function () {
         return response()->json([
             'success' => true,
             'mensaje' => '¡Token JWT válido!',
-            'usuario' => auth('api')->user(),
+            'usuario' => auth()->user(),
             'timestamp' => now()
         ]);
     });
 
-    // Acciones del usuario autenticado
     Route::prefix('auth')->group(function () {
-        Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('me', [AuthController::class, 'me']);
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
 
-    // Recursos REST protegidos
-    Route::apiResource('usuarios', UsuarioController::class);
+    Route::get('/usuarios', [UsuarioController::class, 'index']);
+    Route::get('/usuarios/{id}', [UsuarioController::class, 'show']);
+    Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
+    Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']);
+
     Route::apiResource('presentaciones', PresentacionController::class);
     Route::apiResource('slides', SlideController::class);
     Route::apiResource('comentarios', ComentarioController::class);
     Route::apiResource('reacciones', ReaccionController::class);
+    Route::apiResource('temas', TemaController::class);
+    Route::apiResource('calificaciones', CalificacionController::class);
 });
