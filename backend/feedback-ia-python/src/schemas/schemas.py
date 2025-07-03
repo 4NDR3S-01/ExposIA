@@ -15,8 +15,7 @@ class TipoMetricaResponse(TipoMetricaBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 # Esquemas para Metrica
 class MetricaBase(BaseModel):
@@ -32,8 +31,7 @@ class MetricaResponse(MetricaBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 # Esquemas para Parametro
 class ParametroBase(BaseModel):
@@ -50,8 +48,7 @@ class ParametroResponse(ParametroBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 # Esquemas para Grabacion
 class GrabacionBase(BaseModel):
@@ -69,8 +66,7 @@ class GrabacionResponse(GrabacionBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 # Esquemas para Feedback
 class FeedbackBase(BaseModel):
@@ -88,13 +84,11 @@ class FeedbackResponse(FeedbackBase):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 # Esquemas avanzados con relaciones
 class FeedbackDetailResponse(FeedbackResponse):
     grabacion: GrabacionResponse
     parametro: ParametroResponse
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}

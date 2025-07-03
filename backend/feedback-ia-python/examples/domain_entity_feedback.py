@@ -1,0 +1,143 @@
+"""
+Entidad de dominio para Feedback.
+Contiene únicamente lógica de negocio pura, sin dependencias externas.
+"""
+from datetime import datetime
+from typing import Optional
+from dataclasses import dataclass
+from shared.utils.validators import validate_score, validate_id
+
+
+@dataclass
+class Feedback:
+    """
+    Entidad de dominio que representa un feedback de una grabación.
+    
+    Esta clase contiene únicamente lógica de negocio pura y no tiene
+    dependencias de frameworks o bibliotecas externas.
+    """
+    
+    id: Optional[int]
+    grabacion_id: int
+    parametro_id: int
+    valor: float
+    comentario: Optional[str]
+    es_manual: bool
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+    
+    def __post_init__(self):
+        """Validaciones de dominio que se ejecutan después de la creación."""
+        self._validate()
+    
+    def _validate(self) -> None:
+        """Valida las reglas de negocio de la entidad."""
+        if self.grabacion_id <= 0:
+            raise ValueError("El ID de grabación debe ser mayor a 0")
+        
+        if self.parametro_id <= 0:
+            raise ValueError("El ID de parámetro debe ser mayor a 0")
+        
+        if not validate_score(self.valor):
+            raise ValueError("El valor del feedback debe estar entre 0 y 100")
+        
+        if self.comentario and len(self.comentario.strip()) == 0:
+            raise ValueError("El comentario no puede estar vacío si se proporciona")
+    
+    def is_automatic(self) -> bool:
+        """Determina si el feedback fue generado automáticamente."""
+        return not self.es_manual
+    
+    def is_high_score(self, threshold: float = 80.0) -> bool:
+        """Determina si el feedback tiene un puntaje alto."""
+        return self.valor >= threshold
+    
+    def is_low_score(self, threshold: float = 40.0) -> bool:
+        """Determina si el feedback tiene un puntaje bajo."""
+        return self.valor <= threshold
+    
+    def get_performance_level(self) -> str:
+        """Obtiene el nivel de rendimiento basado en el valor."""
+        if self.is_high_score(80):
+            return "Excelente"
+        elif self.is_high_score(60):
+            return "Bueno"
+        elif self.is_low_score(40):
+            return "Necesita Mejora"
+        else:
+            return "Regular"
+    
+    def update_valor(self, nuevo_valor: float) -> None:
+        """Actualiza el valor del feedback con validación."""
+        if not validate_score(nuevo_valor):
+            raise ValueError("El nuevo valor debe estar entre 0 y 100")
+        
+        self.valor = nuevo_valor
+        self.updated_at = datetime.utcnow()
+    
+    def add_comentario(self, comentario: str) -> None:
+        """Añade o actualiza el comentario del feedback."""
+        if not comentario or len(comentario.strip()) == 0:
+            raise ValueError("El comentario no puede estar vacío")
+        
+        self.comentario = comentario.strip()
+        self.updated_at = datetime.utcnow()
+    
+    def mark_as_manual(self) -> None:
+        """Marca el feedback como manual."""
+        self.es_manual = True
+        self.updated_at = datetime.utcnow()
+    
+    def to_dict(self) -> dict:
+        """Convierte la entidad a diccionario para serialización."""
+        return {
+            'id': self.id,
+            'grabacion_id': self.grabacion_id,
+            'parametro_id': self.parametro_id,
+            'valor': self.valor,
+            'comentario': self.comentario,
+            'es_manual': self.es_manual,
+            'performance_level': self.get_performance_level(),
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+    @classmethod
+    def create_automatic_feedback(
+        cls,
+        grabacion_id: int,
+        parametro_id: int,
+        valor: float,
+        comentario: Optional[str] = None
+    ) -> 'Feedback':
+        """Factory method para crear feedback automático."""
+        return cls(
+            id=None,
+            grabacion_id=grabacion_id,
+            parametro_id=parametro_id,
+            valor=valor,
+            comentario=comentario,
+            es_manual=False,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+    
+    @classmethod
+    def create_manual_feedback(
+        cls,
+        grabacion_id: int,
+        parametro_id: int,
+        valor: float,
+        comentario: str
+    ) -> 'Feedback':
+        """Factory method para crear feedback manual."""
+        return cls(
+            id=None,
+            grabacion_id=grabacion_id,
+            parametro_id=parametro_id,
+            valor=valor,
+            comentario=comentario,
+            es_manual=True,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
