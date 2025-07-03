@@ -1,7 +1,7 @@
- // /src/controllers/fragmentar-audio.controller.ts
+// /src/controllers/fragmentar-audio.controller.ts
 
 
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Delete, Param } from '@nestjs/common';
 import { FragmentoAudioService } from '../services/fragmento-audio.service';
 import { CreateFragmentoAudioDto } from '../models/fragmento_audio.dto';
 
@@ -12,5 +12,10 @@ export class FragmentoAudioController {
   @Post()
   crear(@Body() dto: CreateFragmentoAudioDto) {
     return this.servicio.crear(dto);
+  }
+
+  @Delete(':id')
+  eliminar(@Param('id') id: number) {
+    return this.servicio.eliminar(id);
   }
 }

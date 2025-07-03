@@ -1,0 +1,54 @@
+type Grabacion {
+  id: ID!
+  usuario_id: ID!
+  presentacion_id: ID!
+  archivo_audio: String
+  fecha_grabacion: String
+  nombreArchivo: String
+}
+
+type Navegacion {
+  id: ID!
+  grabacion_id: ID!
+  slide_id: ID!
+  timestamp: Int!
+  tipo_navegacion: String!
+}
+
+type Fragmento {
+  id: ID!
+  grabacion_id: ID!
+  slide_id: ID!
+  inicio_segundo: Int!
+  fin_segundo: Int!
+  archivo_fragmento: String
+}
+
+type Nota {
+  id: ID!
+  grabacion_id: ID!
+  slide_id: ID!
+  contenido: String!
+  timestamp: Int!
+}
+
+type Historial {
+  id: ID!
+  grabacion_id: ID!
+  duracion_total: Int!
+  fecha_inicio: String
+  fecha_fin: String
+  finalizado: Boolean
+}
+
+type GrabacionResumen {
+  grabacion: Grabacion
+  navegaciones: [Navegacion]
+  fragmentos: [Fragmento]
+  notas: [Nota]
+  historial: Historial
+}
+
+type Query {
+  resumenGrabacion(id: ID!): GrabacionResumen
+}

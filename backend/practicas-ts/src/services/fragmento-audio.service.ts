@@ -27,4 +27,14 @@ export class FragmentoAudioService {
     // 4. Retornar con el archivo ya generado
     return procesado;
   }
+
+  async eliminar(id: number) {
+    const fragmento = await this.fragmentoRepo.findOneBy({ id });
+    if (!fragmento) {
+      return { success: false, message: 'Fragmento no encontrado' };
+    }
+
+    await this.fragmentoRepo.remove(fragmento);
+    return { success: true, message: 'Fragmento eliminado correctamente' };
+  }
 }
