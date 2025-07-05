@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'ws' => [
+    'url'   => env('WS_URL', 'http://localhost:9000'),
+    'token' => env('WS_TOKEN', 'dev'),
+],
 
 ];
