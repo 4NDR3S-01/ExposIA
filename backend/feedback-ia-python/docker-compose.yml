@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db-feedback:
+    image: postgres:15
+    container_name: feedback_postgres
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: feedback
+      POSTGRES_PASSWORD: feedback123
+      POSTGRES_DB: feedback_db
+    volumes:
+      - feedback_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  feedback-ia-python:
+    build: .
+    container_name: feedback_ia_python
+    ports:
+      - '8000:8000'
+    environment:
+      DATABASE_URL: postgresql://feedback:feedback123@db-feedback:5432/feedback_db
+      API_KEY: your-secret-api-key-here
+      DEBUG: 'true'
+    depends_on:
+      - db-feedback
+    restart: unless-stopped
+
+volumes:
+  feedback_pgdata:

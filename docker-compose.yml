@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # Practicas-TS DB
+  practicas_postgres:
+    image: postgres:15
+    container_name: practicas_postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: exposia
+      POSTGRES_PASSWORD: exposia123
+      POSTGRES_DB: exposia_db
+    volumes:
+      - practicas_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Calificacion Java DB
+  calificacion_postgres:
+    image: postgres:15
+    container_name: calificacion_postgres
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Carlos@123
+      POSTGRES_DB: postgres
+    volumes:
+      - calificacion_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Feedback Python DB
+  feedback_postgres:
+    image: postgres:15
+    container_name: feedback_postgres
+    ports:
+      - '5434:5432'
+    environment:
+      POSTGRES_USER: feedback
+      POSTGRES_PASSWORD: feedback123
+      POSTGRES_DB: feedback_db
+    volumes:
+      - feedback_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Presentaciones PHP DB
+  presentaciones_postgres:
+    image: postgres:15
+    container_name: presentaciones_postgres
+    ports:
+      - '5435:5432'
+    environment:
+      POSTGRES_USER: exposia
+      POSTGRES_PASSWORD: exposia123
+      POSTGRES_DB: exposia_db
+    volumes:
+      - presentaciones_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Calificacion Java App
+  springboot_modulo:
+    build: ./backend/calificacion-java/springboot-modulo
+    container_name: springboot_modulo
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://calificacion_postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Carlos@123
+    depends_on:
+      - calificacion_postgres
+    restart: unless-stopped
+
+  # Feedback Python App
+  feedback_ia_python:
+    build: ./backend/feedback-ia-python
+    container_name: feedback_ia_python
+    ports:
+      - '8000:8000'
+    environment:
+      DATABASE_URL: postgresql://feedback:feedback123@feedback_postgres:5432/feedback_db
+      API_KEY: your-secret-api-key-here
+      DEBUG: 'true'
+    depends_on:
+      - feedback_postgres
+    restart: unless-stopped
+
+  # Presentaciones PHP App
+  presentaciones_php:
+    build: ./backend/presentaciones-php
+    container_name: presentaciones_php
+    ports:
+      - '8001:80'
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: presentaciones_postgres
+      DB_PORT: 5432
+      DB_DATABASE: exposia_db
+      DB_USERNAME: exposia
+      DB_PASSWORD: exposia123
+    depends_on:
+      - presentaciones_postgres
+    restart: unless-stopped
+
+  # Infraestructura opcional (gateway y wslogger)
+  gateway:
+    build: ./infra/gateway-dummy
+    container_name: gateway
+    ports:
+      - '4000:4000'
+    restart: unless-stopped
+
+  wslogger:
+    build: ./infra/ws-logger
+    container_name: wslogger
+    ports:
+      - '9000:9000'
+    restart: unless-stopped
+
+volumes:
+  practicas_pgdata:
+  calificacion_pgdata:
+  feedback_pgdata:
+  presentaciones_pgdata:

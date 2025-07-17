@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db-calificacion:
+    image: postgres:15
+    container_name: calificacion_postgres
+    ports:
+      - '5433:5432'  # Puerto externo 5433 para evitar conflicto
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Carlos@123
+      POSTGRES_DB: postgres
+    volumes:
+      - calificacion_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  springboot-modulo:
+    build: .
+    container_name: springboot_modulo
+    ports:
+      - '8080:8080'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-calificacion:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Carlos@123
+    depends_on:
+      - db-calificacion
+    restart: unless-stopped
+    # Si tienes un .env, puedes montar aquí
+    # env_file:
+    #   - .env
+
+volumes:
+  calificacion_pgdata:
