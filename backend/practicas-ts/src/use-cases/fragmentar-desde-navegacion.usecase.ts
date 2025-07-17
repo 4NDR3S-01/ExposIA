@@ -1,6 +1,6 @@
 // src/use-cases/fragmentar-desde-navegacion.usecase.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NavegacionSlide } from '../models/navegacion_slide.entity';
@@ -24,15 +24,23 @@ export class FragmentarDesdeNavegacionUseCase {
   ) {}
 
   async ejecutar(grabacionId: number): Promise<FragmentoAudio[]> {
+    // Verificar que la grabación existe
+    const grabacion = await this.grabacionRepo.findOneBy({ id: grabacionId });
+    if (!grabacion) {
+      throw new NotFoundException(`Grabación con ID ${grabacionId} no encontrada`);
+    }
+
     const navegaciones = await this.navegacionRepo.find({
       where: { grabacion_id: grabacionId },
       order: { timestamp: 'ASC' },
     });
 
-    console.log('🧠 Navegaciones:', navegaciones); 
+    console.log('🧠 Navegaciones encontradas:', navegaciones.length); 
 
     if (navegaciones.length < 2) {
-      throw new Error('Se necesitan al menos dos eventos de navegación para fragmentar');
+      throw new BadRequestException(
+        `Se necesitan al menos 2 eventos de navegación para fragmentar. Encontrados: ${navegaciones.length}`
+      );
     }
 
     const fragmentosGenerados: FragmentoAudio[] = [];
@@ -40,6 +48,8 @@ export class FragmentarDesdeNavegacionUseCase {
     for (let i = 0; i < navegaciones.length - 1; i++) {
       const inicio = navegaciones[i];
       const fin = navegaciones[i + 1];
+
+      console.log(`📍 Creando fragmento ${i + 1}: Slide ${inicio.slide_id} (${inicio.timestamp}ms - ${fin.timestamp}ms)`);
 
       const fragmento = this.fragmentoRepo.create({
         grabacion_id: grabacionId,
@@ -49,8 +59,16 @@ export class FragmentarDesdeNavegacionUseCase {
       });
 
       const guardado = await this.fragmentoRepo.save(fragmento);
-      const procesado = await this.fragmentarAudioUseCase.ejecutar(guardado.id);
-      fragmentosGenerados.push(procesado);
+      
+      try {
+        const procesado = await this.fragmentarAudioUseCase.ejecutar(guardado.id);
+        fragmentosGenerados.push(procesado);
+        console.log(`✅ Fragmento ${i + 1} creado exitosamente`);
+      } catch (error) {
+        console.error(`❌ Error al procesar fragmento ${i + 1}:`, error.message);
+        // Continuamos con el siguiente fragmento en lugar de fallar completamente
+        fragmentosGenerados.push(guardado);
+      }
     }
 
     return fragmentosGenerados;

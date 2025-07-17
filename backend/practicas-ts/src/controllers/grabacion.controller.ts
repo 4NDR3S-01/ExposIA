@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, Body, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateGrabacionDto } from '../models/grabacion.dto';
 import { diskStorage } from 'multer';
@@ -20,12 +20,33 @@ export class GrabacionController {
           cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
       }),
+      fileFilter: (req, file, cb) => {
+        // Validar tipos de archivo de audio
+        const allowedMimeTypes = [
+          'audio/mpeg', // .mp3
+          'audio/wav',  // .wav
+          'audio/mp4',  // .m4a
+          'audio/x-m4a', // .m4a
+          'audio/ogg',  // .ogg
+          'audio/webm', // .webm
+        ];
+        
+        if (allowedMimeTypes.includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new Error(`Tipo de archivo no válido. Solo se permiten archivos de audio: ${allowedMimeTypes.join(', ')}`), false);
+        }
+      },
     }),
   )
   async subirAudio(
     @UploadedFile() archivo_audio: Express.Multer.File,
     @Body() body: CreateGrabacionDto,
   ) {
+    if (!archivo_audio) {
+      throw new BadRequestException('No se proporcionó ningún archivo de audio');
+    }
+
     const dto = {
       ...body,
       nombreArchivo: archivo_audio.filename,

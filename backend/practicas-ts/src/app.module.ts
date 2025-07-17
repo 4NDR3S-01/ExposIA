@@ -5,6 +5,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { Grabacion } from './models/grabacion.entity';
 import { NavegacionSlide } from './models/navegacion_slide.entity';
 import { FragmentoAudio } from './models/fragmento_audio.entity';
+import { AnalisisAgente } from './agente/entities/agent-analysis.entity';
+
 
 import { GrabacionModule } from './grabacion.module';
 import { NavegacionSlideModule } from './navegacion-slide.module';
@@ -12,6 +14,7 @@ import { FragmentoAudioModule } from './fragmento-audio.module';
 import { DebugModule } from './debug.module';
 import { NotaSlideModule } from './nota-slide.module';
 import { HistorialPracticaModule } from './historial-practica.module';
+import { AgentModule } from './agente/agent.module';
 
 import { CrearGrabacionUseCase } from './use-cases/crear-grabacion.use-case';
 import { AuthMiddleware } from './common/middleware/api-key.middleware';
@@ -27,7 +30,7 @@ dotenv.config();
       username: 'exposia',
       password: 'exposia123',
       database: 'exposia_db',
-      entities: [Grabacion, NavegacionSlide, FragmentoAudio],
+      entities: [Grabacion, NavegacionSlide, FragmentoAudio, AnalisisAgente],
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -37,6 +40,7 @@ dotenv.config();
     DebugModule,
     NotaSlideModule,
     HistorialPracticaModule,
+    AgentModule,
     TypeOrmModule.forFeature([Grabacion]),
     MulterModule.register({
       dest: './uploads/audio',

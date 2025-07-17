@@ -12,7 +12,13 @@ export class RegistrarNavegacionSlideUseCase {
   ) {}
 
   async execute(dto: CreateNavegacionSlideDto) {
-    const nueva = this.repo.create(dto);
+    // Asignar valor por defecto si no se proporciona tipo_navegacion
+    const navegacionData = {
+      ...dto,
+      tipo_navegacion: dto.tipo_navegacion || 'navegacion'
+    };
+    
+    const nueva = this.repo.create(navegacionData);
     return this.repo.save(nueva);
   }
 }
