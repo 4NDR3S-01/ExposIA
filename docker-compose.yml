@@ -103,39 +103,18 @@ services:
     restart: unless-stopped
 
   # Infraestructura opcional (gateway y wslogger)
-  gateway_graphql:
-    build: ./gateway-graphql
-    container_name: gateway_graphql
+  gateway:
+    build: ./infra/gateway-dummy
+    container_name: gateway
     ports:
       - '4000:4000'
-    environment:
-      PRESENTACIONES_API_URL: http://presentaciones_php/api
-      PRACTICAS_API_URL: http://host.docker.internal:3000
-      FEEDBACK_API_URL: http://feedback_ia_python:8000/api/v1
-      CALIFICACION_API_URL: http://springboot_modulo:8080/api
-      WS_NOTIFICATION_URL: http://websocket_notifications:9000
-      WS_NOTIFICATION_TOKEN: dev
-      PRESENTACIONES_JWT_TOKEN: your-jwt-token-here
-      PRACTICAS_API_KEY: mi-token-seguro
-      FEEDBACK_API_KEY: test-api-key-12345
-      CALIFICACION_API_USER: admin
-      CALIFICACION_API_PASS: admin123
-    depends_on:
-      - presentaciones_php
-      - feedback_ia_python
-      - springboot_modulo
-      - websocket_notifications
     restart: unless-stopped
 
-  websocket_notifications:
-    build: ./websocket-notifications
-    container_name: websocket_notifications
+  wslogger:
+    build: ./infra/ws-logger
+    container_name: wslogger
     ports:
       - '9000:9000'
-    environment:
-      PORT: 9000
-      WS_TOKEN: dev
-      ENVIRONMENT: development
     restart: unless-stopped
 
 volumes:

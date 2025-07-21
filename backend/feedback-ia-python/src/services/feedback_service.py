@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from src.models.models import TipoMetrica, Metrica, Parametro, Grabacion, Feedback
 from src.schemas import schemas
-from .notification_service import notification_service
 
 class FeedbackService:
     @staticmethod
@@ -11,14 +10,6 @@ class FeedbackService:
         db.add(db_tipo_metrica)
         db.commit()
         db.refresh(db_tipo_metrica)
-        
-        # Enviar notificación
-        notification_service.send_notification('tipo_metrica.creado', {
-            'id': db_tipo_metrica.id,
-            'nombre': db_tipo_metrica.nombre,
-            'descripcion': db_tipo_metrica.descripcion
-        })
-        
         return db_tipo_metrica
     
     @staticmethod
@@ -35,14 +26,6 @@ class FeedbackService:
         db.add(db_metrica)
         db.commit()
         db.refresh(db_metrica)
-        
-        # Enviar notificación
-        notification_service.send_metric_created({
-            'id': db_metrica.id,
-            'nombre': db_metrica.nombre,
-            'tipo_metrica_id': db_metrica.tipo_metrica_id
-        })
-        
         return db_metrica
     
     @staticmethod
@@ -91,16 +74,6 @@ class FeedbackService:
         db.add(db_feedback)
         db.commit()
         db.refresh(db_feedback)
-        
-        # Enviar notificación
-        notification_service.send_feedback_created({
-            'id': db_feedback.id,
-            'grabacion_id': db_feedback.grabacion_id,
-            'parametro_id': db_feedback.parametro_id,
-            'valor': db_feedback.valor,
-            'es_manual': db_feedback.es_manual
-        })
-        
         return db_feedback
     
     @staticmethod
