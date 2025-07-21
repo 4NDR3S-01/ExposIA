@@ -16,15 +16,8 @@ import com.informaticonfing.spring.springboot_modulo.repository.ParametrosIdeale
 import com.informaticonfing.spring.springboot_modulo.repository.DetalleCalificacionRepository;
 import com.informaticonfing.spring.springboot_modulo.repository.FeedbackCalificacionRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,26 +32,17 @@ public class CalificacionService {
     private final ParametrosIdealesRepository parametrosRepo;
     private final DetalleCalificacionRepository detalleRepo;
     private final FeedbackCalificacionRepository feedbackRepo;
-    private final RestTemplate restTemplate;
-    
-    @Value("${ws.notification.url:http://localhost:9000}")
-    private String wsNotificationUrl;
-    
-    @Value("${ws.notification.token:dev}")
-    private String wsNotificationToken;
 
     public CalificacionService(
             CalificacionRepository repository,
             ParametrosIdealesRepository parametrosRepo,
             DetalleCalificacionRepository detalleRepo,
-            FeedbackCalificacionRepository feedbackRepo,
-            RestTemplate restTemplate
+            FeedbackCalificacionRepository feedbackRepo
     ) {
         this.repository = repository;
         this.parametrosRepo = parametrosRepo;
         this.detalleRepo = detalleRepo;
         this.feedbackRepo = feedbackRepo;
-        this.restTemplate = restTemplate;
     }
 
     /**
@@ -94,15 +78,6 @@ public class CalificacionService {
         }
         Calificacion entidad = CalificacionMapper.toEntity(dto, parametros);
         Calificacion saved = repository.save(entidad);
-        
-        // Enviar notificación
-        enviarNotificacion("calificacion.creada", Map.of(
-            "id", saved.getId(),
-            "grabacionId", saved.getGrabacionId(),
-            "usuarioId", saved.getUsuarioId(),
-            "puntajeGlobal", saved.getPuntajeGlobal()
-        ));
-        
         return CalificacionMapper.toDTO(saved);
     }
 
@@ -176,46 +151,10 @@ public class CalificacionService {
             }
         }
 
-        // Enviar notificación de calificación con IA
-        enviarNotificacion("calificacion.ia.aplicada", Map.of(
-            "id", saved.getId(),
-            "grabacionId", saved.getGrabacionId(),
-            "puntajeFinal", saved.getPuntajeGlobal(),
-            "detallesCount", dto.getDetalles().size()
-        ));
 
         // Obtener los detalles actualizados para incluirlos en la respuesta
         List<DetalleCalificacion> detallesActualizados = detalleRepo.findByCalificacionId(saved.getId());
 
         return CalificacionMapper.toDTO(saved, detallesActualizados);
-    }
-    
-    /**
-     * Envía notificación al servicio WebSocket
-     */
-    private void enviarNotificacion(String evento, Map<String, Object> payload) {
-        try {
-            String url = wsNotificationUrl + "/notify?token=" + wsNotificationToken;
-            
-            Map<String, Object> notificationData = new HashMap<>();
-            notificationData.put("event", evento);
-            
-            Map<String, Object> enrichedPayload = new HashMap<>(payload);
-            enrichedPayload.put("timestamp", LocalDateTime.now().toString());
-            enrichedPayload.put("source", "calificacion-java");
-            notificationData.put("payload", enrichedPayload);
-            
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(notificationData, headers);
-            
-            restTemplate.postForObject(url, request, String.class);
-            
-            System.out.println("📡 Notificación enviada: " + evento);
-        } catch (Exception e) {
-            System.err.println("❌ Error enviando notificación " + evento + ": " + e.getMessage());
-            // No lanzamos la excepción para que no afecte la operación principal
-        }
     }
 }
