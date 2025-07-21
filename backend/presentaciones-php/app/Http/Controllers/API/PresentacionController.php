@@ -7,6 +7,7 @@ use App\Models\Presentacion;
 use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class PresentacionController extends Controller
 {
@@ -34,9 +35,18 @@ class PresentacionController extends Controller
         for ($i = 1; $i <= 3; $i++) {
             Slide::create([
                 'numero_slide' => $i,
+                'texto_slide' => "Contenido slide $i",
                 'id_presentacion' => $presentacion->id
             ]);
         }
+
+        // Enviar notificación al servicio WebSocket
+        $this->enviarNotificacion('presentacion.creada', [
+            'id' => $presentacion->id,
+            'titulo' => $presentacion->titulo,
+            'usuarioId' => $presentacion->id_usuario,
+            'temaId' => $presentacion->id_tema,
+        ]);
 
         $presentacion->load(['usuario', 'tema', 'slides', 'calificaciones']);
 
@@ -87,6 +97,39 @@ class PresentacionController extends Controller
 
         $presentacion->delete();
 
+        // Enviar notificación de eliminación
+        $this->enviarNotificacion('presentacion.eliminada', [
+            'id' => $id,
+            'titulo' => $presentacion->titulo,
+            'usuarioId' => Auth::id(),
+        ]);
+
         return response()->json(['success' => true, 'message' => 'Presentación eliminada correctamente']);
+    }
+
+    /**
+     * Enviar notificación al servicio WebSocket
+     */
+    private function enviarNotificacion(string $evento, array $payload): void
+    {
+        try {
+            $wsUrl = env('WS_NOTIFICATION_URL', 'http://localhost:9000');
+            $token = env('WS_NOTIFICATION_TOKEN', 'dev');
+
+            Http::timeout(5)->post("{$wsUrl}/notify", [
+                'event' => $evento,
+                'payload' => array_merge($payload, [
+                    'timestamp' => now()->toISOString(),
+                    'source' => 'presentaciones-php'
+                ])
+            ], [
+                'token' => $token
+            ]);
+
+            \Log::info("Notificación enviada: {$evento}", $payload);
+        } catch (\Exception $e) {
+            \Log::error("Error enviando notificación {$evento}: " . $e->getMessage());
+            // No lanzamos la excepción para que no afecte la operación principal
+        }
     }
 }
