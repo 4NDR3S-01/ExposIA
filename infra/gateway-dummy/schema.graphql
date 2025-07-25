@@ -1,0 +1,299 @@
+# ===== TIPOS DE DATOS DE MÓDULO PHP (Presentaciones) =====
+type Usuario {
+  id: ID
+  nombre: String
+  email: String
+  created_at: String
+  updated_at: String
+  presentaciones: [Presentacion]
+  calificaciones: [Calificacion]
+}
+
+type Presentacion {
+  id: ID
+  titulo: String
+  id_usuario: ID
+  id_tema: ID
+  archivo_pdf: String
+  created_at: String
+  updated_at: String
+  practicas: [Practica]
+  feedback: [Feedback]
+  calificacionFinal: CalificacionCompleta
+}
+
+type Tema {
+  id: ID
+  nombre: String
+  descripcion: String
+  created_at: String
+  updated_at: String
+}
+
+# ===== TIPOS DE DATOS DE MÓDULO TYPESCRIPT (Prácticas) =====
+type Practica {
+  id: ID
+  id_presentacion: ID
+  grabacion: Grabacion
+  navegaciones: [NavegacionSlide]
+  fragmentos: [FragmentoAudio]
+  notas: [NotaSlide]
+  historial: HistorialPractica
+}
+
+type Grabacion {
+  id: ID
+  id_usuario: ID
+  id_presentacion: ID
+  archivo_audio: String
+  duracion: Float
+  created_at: String
+  updated_at: String
+}
+
+type NavegacionSlide {
+  id: ID
+  grabacion_id: ID
+  numero_slide: Int
+  tiempo_inicio: Float
+  tiempo_fin: Float
+  created_at: String
+}
+
+type FragmentoAudio {
+  id: ID
+  grabacion_id: ID
+  numero_slide: Int
+  tiempo_inicio: Float
+  tiempo_fin: Float
+  archivo_fragmento: String
+  created_at: String
+}
+
+type NotaSlide {
+  id: ID
+  grabacion_id: ID
+  numero_slide: Int
+  nota: String
+  created_at: String
+}
+
+type HistorialPractica {
+  id: ID
+  grabacion_id: ID
+  total_slides: Int
+  tiempo_total: Float
+  promedio_por_slide: Float
+  created_at: String
+}
+
+# ===== TIPOS DE DATOS DE MÓDULO PYTHON (Feedback IA) =====
+type Feedback {
+  id: ID
+  # Campos originales (compatibilidad)
+  id_usuario: ID
+  id_presentacion: ID
+  metricas: [Metrica]
+  feedback_texto: String
+  puntuacion_general: Float
+  # Nuevos campos del servicio real
+  grabacion_id: Int
+  parametro_id: Int
+  valor: Float
+  comentario: String
+  es_manual: Boolean
+  created_at: String
+  updated_at: String
+}
+
+type TipoMetrica {
+  id: ID
+  nombre: String
+  descripcion: String
+  peso: Float
+  created_at: String
+  updated_at: String
+}
+
+type Metrica {
+  id: ID
+  tipo_metrica_id: ID
+  valor: Float
+  descripcion: String
+  parametros: [Parametro]
+  created_at: String
+  updated_at: String
+  tipo: TipoMetrica
+}
+
+type Parametro {
+  id: ID
+  metrica_id: ID
+  nombre: String
+  valor: String
+  created_at: String
+  updated_at: String
+}
+
+# ===== TIPOS DE DATOS DE MÓDULO JAVA (Calificación) =====
+type CalificacionCompleta {
+  id: ID
+  id_usuario: ID
+  id_presentacion: ID
+  puntaje_total: Float
+  comentario_general: String
+  detalles: [DetalleCalificacion]
+  criterios: [CriterioEvaluacion]
+  feedback_calificacion: [FeedbackCalificacion]
+  parametros_ideales: [ParametroIdeal]
+  created_at: String
+  updated_at: String
+}
+
+type DetalleCalificacion {
+  id: ID
+  calificacion_id: ID
+  criterio: String
+  puntaje: Float
+  peso: Float
+  comentario: String
+  created_at: String
+  updated_at: String
+}
+
+type CriterioEvaluacion {
+  id: ID
+  nombre: String
+  descripcion: String
+  peso_maximo: Float
+  activo: Boolean
+  created_at: String
+  updated_at: String
+}
+
+type FeedbackCalificacion {
+  id: ID
+  calificacion_id: ID
+  aspecto: String
+  comentario: String
+  sugerencia: String
+  created_at: String
+  updated_at: String
+}
+
+type ParametroIdeal {
+  id: ID
+  metrica: String
+  valor_minimo: Float
+  valor_maximo: Float
+  peso: Float
+  descripcion: String
+  created_at: String
+  updated_at: String
+}
+
+# ===== TIPOS AUXILIARES =====
+type Calificacion {
+  id: ID
+  puntaje: Int
+  comentario: String
+  id_usuario: ID
+  id_presentacion: ID
+  created_at: String
+  updated_at: String
+}
+
+# ===== INPUT TYPES PARA MUTATIONS =====
+input IniciarPracticaInput {
+  id_usuario: ID!
+  id_presentacion: ID!
+  archivo_audio: String!
+}
+
+input GuardarNavegacionInput {
+  grabacion_id: ID!
+  numero_slide: Int!
+  tiempo_inicio: Float!
+  tiempo_fin: Float!
+}
+
+input GuardarNotaInput {
+  grabacion_id: ID!
+  numero_slide: Int!
+  nota: String!
+}
+
+input GenerarFeedbackInput {
+  grabacion_id: Int!
+  parametro_id: Int!
+  valor: Float!
+  comentario: String
+  es_manual: Boolean
+}
+
+input CalificarPresentacionInput {
+  id_usuario: ID!
+  id_presentacion: ID!
+  usar_ia: Boolean
+  comentario_adicional: String
+}
+
+# ===== QUERIES =====
+type Query {
+  # Consultas del módulo PHP
+  usuarios: [Usuario]
+  usuario(id: ID!): Usuario
+  presentaciones: [Presentacion]
+  presentacion(id: ID!): Presentacion
+  temas: [Tema]
+  
+  # Consultas del módulo TypeScript
+  practicas(id_usuario: ID): [Practica]
+  practica(id: ID!): Practica
+  grabacion(id: ID!): Grabacion
+  
+  # Consultas del módulo Python
+  feedbacks(id_usuario: ID): [Feedback]
+  feedback(id: ID!): Feedback
+  tiposMetrica: [TipoMetrica]
+  
+  # Consultas del módulo Java
+  calificaciones(id_usuario: ID): [CalificacionCompleta]
+  calificacion(id: ID!): CalificacionCompleta
+  criteriosEvaluacion: [CriterioEvaluacion]
+  parametrosIdeales: [ParametroIdeal]
+  
+  # Consulta completa del flujo de trabajo
+  flujoCompleto(id_presentacion: ID!, id_usuario: ID!): FlujoCompleto
+}
+
+# ===== MUTATIONS =====
+type Mutation {
+  # Flujo completo del sistema
+  ejecutarFlujoCompleto(
+    id_usuario: ID!
+    id_presentacion: ID!
+    archivo_audio: String!
+    navegaciones: [GuardarNavegacionInput!]!
+    notas: [GuardarNotaInput!]
+    usar_ia_calificacion: Boolean
+  ): FlujoCompleto
+  
+  # Mutations individuales por módulo
+  iniciarPractica(input: IniciarPracticaInput!): Grabacion
+  guardarNavegacion(input: GuardarNavegacionInput!): NavegacionSlide
+  guardarNota(input: GuardarNotaInput!): NotaSlide
+  generarFeedback(input: GenerarFeedbackInput!): Feedback
+  calificarPresentacion(input: CalificarPresentacionInput!): CalificacionCompleta
+}
+
+# ===== TIPO PARA FLUJO COMPLETO =====
+type FlujoCompleto {
+  usuario: Usuario
+  presentacion: Presentacion
+  practica: Practica
+  feedback: Feedback
+  calificacion: CalificacionCompleta
+  estado: String
+  timestamp: String
+}
