@@ -1,17 +1,28 @@
 {
-  "name": "app",
+  "name": "gateway-dummy",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node test/gateway-test.js",
+    "test-mutation": "node -e \"require('./test/gateway-test').testMutation()\"",
+    "test-flujo": "node test-flujo-completo.js",
+    "test-completo": "npm run test-flujo",
+    "install-deps": "npm install"
   },
-  "keywords": [],
+  "keywords": ["graphql", "api-gateway", "microservices"],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "API Gateway GraphQL para ExposIA - Orquesta 4 microservicios (PHP, TypeScript, Python, Java)",
   "dependencies": {
     "apollo-server": "^3.13.0",
+    "axios": "^1.10.0",
+    "dotenv": "^16.4.0",
     "graphql": "^16.11.0",
     "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }
