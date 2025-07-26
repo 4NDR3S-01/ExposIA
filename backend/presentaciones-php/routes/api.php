@@ -24,7 +24,21 @@ Route::prefix('auth')->group(function () {
 // Registro público directo como usuario
 Route::post('/usuarios', [UsuarioController::class, 'store']);
 
-// Rutas protegidas por JWT
+// === RUTAS TEMPORALMENTE SIN AUTH PARA TESTING ===
+// TODO: Mover a auth centralizada desde API Gateway
+Route::get('/usuarios', [UsuarioController::class, 'index']);
+Route::get('/usuarios/{id}', [UsuarioController::class, 'show']);
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
+Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']);
+
+Route::apiResource('presentaciones', PresentacionController::class);
+Route::apiResource('slides', SlideController::class);
+Route::apiResource('comentarios', ComentarioController::class);
+Route::apiResource('reacciones', ReaccionController::class);
+Route::apiResource('temas', TemaController::class);
+Route::apiResource('calificaciones', CalificacionController::class);
+
+// Rutas protegidas por JWT (mantener solo las de auth)
 Route::middleware(['jwt'])->group(function () {
 
     Route::get('/test-auth', function () {
@@ -42,15 +56,4 @@ Route::middleware(['jwt'])->group(function () {
         Route::post('refresh', [AuthController::class, 'refresh']);
     });
 
-    Route::get('/usuarios', [UsuarioController::class, 'index']);
-    Route::get('/usuarios/{id}', [UsuarioController::class, 'show']);
-    Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
-    Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']);
-
-    Route::apiResource('presentaciones', PresentacionController::class);
-    Route::apiResource('slides', SlideController::class);
-    Route::apiResource('comentarios', ComentarioController::class);
-    Route::apiResource('reacciones', ReaccionController::class);
-    Route::apiResource('temas', TemaController::class);
-    Route::apiResource('calificaciones', CalificacionController::class);
 });
