@@ -1,0 +1,34 @@
+services:
+  websocket-server:
+    build: .
+    container_name: exposia_websocket_server
+    ports:
+      - "4001:4001"
+    environment:
+      - NODE_ENV=production
+      - GATEWAY_URL=http://host.docker.internal:4000
+      - WS_PORT=4001
+    networks:
+      - exposia-network
+    depends_on:
+      - gateway
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "const WebSocket = require('ws'); const ws = new WebSocket('ws://localhost:4001/ws'); ws.on('open', () => { ws.close(); process.exit(0); }); ws.on('error', () => process.exit(1));"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  gateway:
+    image: exposia-gateway:latest
+    container_name: exposia_gateway
+    ports:
+      - "4000:4000"
+    networks:
+      - exposia-network
+    restart: unless-stopped
+
+networks:
+  exposia-network:
+    external: true

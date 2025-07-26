@@ -9,11 +9,7 @@
     "test-mutation": "node -e \"require('./test/gateway-test').testMutation()\"",
     "test-flujo": "node test-flujo-completo.js",
     "test-completo": "npm run test-flujo",
-    "ws-server": "node websocket-server.js",
-    "ws-client": "node websocket-client.js",
-    "ws-test": "node test-complete-flow.js",
-    "ws-simple": "node test-simple.js",
-    "full-system": "concurrently \"npm start\" \"npm run ws-server\"",
+    "test-final": "node test_resumen_final.js",
     "install-deps": "npm install"
   },
   "keywords": [
@@ -29,11 +25,9 @@
     "axios": "^1.10.0",
     "dotenv": "^16.4.0",
     "graphql": "^16.11.0",
-    "node-fetch": "^2.7.0",
-    "ws": "^8.18.3"
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
     "nodemon": "^3.0.0"
   }
 }

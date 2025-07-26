@@ -57,6 +57,19 @@ services:
       - presentaciones_pgdata:/var/lib/postgresql/data
     restart: unless-stopped
 
+  # Practicas TypeScript App
+  practicas_ts:
+    build: ./backend/practicas-ts
+    container_name: practicas_ts
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://exposia:exposia123@practicas_postgres:5432/exposia_db
+      NODE_ENV: production
+    depends_on:
+      - practicas_postgres
+    restart: unless-stopped
+
   # Calificacion Java App
   springboot_modulo:
     build: ./backend/calificacion-java/springboot-modulo
@@ -102,19 +115,38 @@ services:
       - presentaciones_postgres
     restart: unless-stopped
 
-  # Infraestructura opcional (gateway y wslogger)
+  # GraphQL Gateway
   gateway:
     build: ./infra/gateway-dummy
-    container_name: gateway
+    container_name: exposia_gateway
     ports:
       - '4000:4000'
+    environment:
+      - NODE_ENV=production
+      - PRACTICAS_SERVICE_URL=http://practicas_ts:3000
+      - PRESENTACIONES_SERVICE_URL=http://presentaciones_php:80
+      - FEEDBACK_SERVICE_URL=http://feedback_ia_python:8000
+      - CALIFICACION_SERVICE_URL=http://springboot_modulo:8080
+      - WS_SERVER_URL=http://websocket_server:4001
+    depends_on:
+      - presentaciones_php
+      - practicas_ts
+      - feedback_ia_python
+      - springboot_modulo
     restart: unless-stopped
 
-  wslogger:
-    build: ./infra/ws-logger
-    container_name: wslogger
+  # WebSocket Server
+  websocket_server:
+    build: ./infra/websocket-server
+    container_name: exposia_websocket_server
     ports:
-      - '9000:9000'
+      - '4001:4001'
+    environment:
+      - NODE_ENV=production
+      - GATEWAY_URL=http://gateway:4000
+      - WS_PORT=4001
+    depends_on:
+      - gateway
     restart: unless-stopped
 
 volumes:

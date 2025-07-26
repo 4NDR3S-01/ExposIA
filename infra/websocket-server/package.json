@@ -1,0 +1,32 @@
+{
+  "name": "exposia-websocket-server",
+  "version": "1.0.0",
+  "description": "WebSocket Server para ExposIA - Comunicación en tiempo real con API Gateway GraphQL",
+  "main": "websocket-server.js",
+  "scripts": {
+    "start": "node websocket-server.js",
+    "dev": "nodemon websocket-server.js",
+    "test": "node test_websocket_final.js",
+    "client": "node websocket-client.js",
+    "install-deps": "npm install"
+  },
+  "keywords": [
+    "websocket",
+    "real-time",
+    "graphql-proxy",
+    "exposia",
+    "microservices"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.18.0",
+    "axios": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
