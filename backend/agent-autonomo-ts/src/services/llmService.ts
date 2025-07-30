@@ -1,4 +1,4 @@
-import { OpenAI } from 'langchain/llms/openai';
+import { OpenAI } from '@langchain/openai';
 
 // Procesa los datos usando un LLM (OpenAI)
 export async function analyzeWithLLM(feedbackData: any): Promise<string> {
